@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Undergraduate Marketing Curriculum Hierarchy: 4 Modules, 18 Categories, 50 Concepts</title>
+  <title>Kelley UG Marketing Curriculum Hierarchy & Syllabus Mapping Dashboard</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <style>
@@ -63,11 +63,13 @@
 
   <!-- Floating Mouseover Tooltip for Tree View -->
   <div id="treeTooltip" class="fixed z-50 pointer-events-none hidden max-w-md bg-white/95 backdrop-blur-md border-2 border-slate-300 rounded-xl shadow-2xl p-4 transition-opacity duration-150">
-    <div class="flex items-center gap-2 mb-1">
+    <div class="flex items-center justify-between gap-2 mb-1">
       <span id="tooltipTypeBadge" class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-800">Level</span>
+      <span id="tooltipCoursesBadge" class="text-[10px] font-mono font-semibold text-slate-500"></span>
     </div>
     <h4 id="tooltipTitle" class="text-sm font-extrabold text-slate-900 mb-1.5 leading-snug">Title</h4>
     <p id="tooltipDefinition" class="text-xs text-slate-700 leading-relaxed"></p>
+    <div id="tooltipSyllabusBox" class="hidden mt-2.5 pt-2 border-t border-slate-200 text-[11px] text-slate-600 space-y-1"></div>
   </div>
 
   <!-- Header -->
@@ -80,20 +82,21 @@
         <div>
           <div class="flex items-center gap-2">
             <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
-              Interactive Curricular Architecture
+              Kelley UG Marketing Curriculum Architecture
             </span>
-            <span class="text-xs text-slate-400">Benchmark: Kotler, Kerin, Grewal, Keller</span>
+            <span class="text-xs text-slate-400">15 Syllabi Mapped (M304, M370, M405, M303, M346, M450)</span>
           </div>
           <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight text-white mt-1">
-            Top 50 Undergraduate Marketing Concepts Hierarchy
+            Top 50 Marketing Concepts & Syllabus Coverage Dashboard
           </h1>
         </div>
       </div>
-      <div class="flex items-center gap-3">
+      <div class="flex flex-wrap items-center gap-2">
         <div class="bg-slate-800/80 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-slate-300">
-          <span class="font-bold text-indigo-400">4</span> Modules &bull; 
+          <span class="font-bold text-indigo-400">4</span> Branches &bull; 
           <span class="font-bold text-emerald-400">18</span> Categories &bull; 
-          <span class="font-bold text-amber-400">50</span> Concepts
+          <span class="font-bold text-amber-400">50</span> Concepts &bull;
+          <span class="font-bold text-rose-400">6</span> Core Courses
         </div>
       </div>
     </div>
@@ -101,37 +104,52 @@
 
   <!-- Navigation Bar -->
   <nav class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row md:items-center md:justify-between gap-3 py-3">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 py-3">
       
-      <!-- View Buttons (4 Tabs, with Top 50 Marketing Concept Hierarchy as the 1st tab) -->
+      <!-- View Buttons (5 Tabs: 1. Hierarchy Tree, 2. Sunburst, 3. Card Matrix, 4. Taxonomy Table, 5. Syllabus Mapping & Gaps) -->
       <div class="flex flex-wrap items-center gap-1 bg-slate-100 p-1 rounded-lg border border-slate-200">
-        <button id="btnTree" onclick="switchView('tree')" class="px-3.5 py-1.5 text-xs font-semibold rounded-md transition-all active-tab flex items-center gap-1.5">
+        <button id="btnTree" onclick="switchView('tree')" class="px-3 py-1.5 text-xs font-semibold rounded-md transition-all active-tab flex items-center gap-1.5">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"/></svg>
           Top 50 Marketing Concept Hierarchy
         </button>
-        <button id="btnSunburst" onclick="switchView('sunburst')" class="px-3.5 py-1.5 text-xs font-semibold text-slate-600 hover:text-slate-900 rounded-md transition-all flex items-center gap-1.5">
+        <button id="btnSunburst" onclick="switchView('sunburst')" class="px-3 py-1.5 text-xs font-semibold text-slate-600 hover:text-slate-900 rounded-md transition-all flex items-center gap-1.5">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><circle cx="12" cy="12" r="6" stroke-width="2"/><circle cx="12" cy="12" r="2" stroke-width="2"/></svg>
           Interactive Sunburst Wheel
         </button>
-        <button id="btnCards" onclick="switchView('cards')" class="px-3.5 py-1.5 text-xs font-semibold text-slate-600 hover:text-slate-900 rounded-md transition-all flex items-center gap-1.5">
+        <button id="btnCards" onclick="switchView('cards')" class="px-3 py-1.5 text-xs font-semibold text-slate-600 hover:text-slate-900 rounded-md transition-all flex items-center gap-1.5">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" stroke-width="2" rx="1"/><rect x="14" y="3" width="7" height="7" stroke-width="2" rx="1"/><rect x="3" y="14" width="7" height="7" stroke-width="2" rx="1"/><rect x="14" y="14" width="7" height="7" stroke-width="2" rx="1"/></svg>
           Curriculum Card Matrix
         </button>
-        <button id="btnTable" onclick="switchView('table')" class="px-3.5 py-1.5 text-xs font-semibold text-slate-600 hover:text-slate-900 rounded-md transition-all flex items-center gap-1.5">
+        <button id="btnTable" onclick="switchView('table')" class="px-3 py-1.5 text-xs font-semibold text-slate-600 hover:text-slate-900 rounded-md transition-all flex items-center gap-1.5">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-10v16m-9-16h18a2 2 0 012 2v12a2 2 0 01-2 2H3a2 2 0 01-2-2V6a2 2 0 012-2z"/></svg>
           Taxonomy Table View
         </button>
+        <button id="btnSyllabus" onclick="switchView('syllabus')" class="px-3 py-1.5 text-xs font-semibold text-slate-600 hover:text-slate-900 rounded-md transition-all flex items-center gap-1.5">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          Syllabus Coverage &amp; Gap Analysis
+        </button>
       </div>
 
-      <!-- Search -->
-      <div class="flex items-center gap-3">
-        <div class="relative w-full md:w-72">
+      <!-- Search & Course Highlight Filter -->
+      <div class="flex flex-wrap items-center gap-2">
+        <select id="courseHighlightSelect" onchange="applyCourseHighlight()" class="text-xs px-2.5 py-1.5 rounded-lg border border-slate-300 bg-white text-slate-700 font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          <option value="ALL">Highlight Course/Gap: All 50 Concepts</option>
+          <option value="GAPS">🔴 True Curriculum Gaps (6 Concepts)</option>
+          <option value="VAR">🟡 Instructor-Dependent Variations (7 Concepts)</option>
+          <option value="M304">BUS-M304 Honors I-Core (Fossen / Godfrey)</option>
+          <option value="M370">BUS-M370 Regular I-Core (Marek / McManus / Blair)</option>
+          <option value="M405">BUS-M405 Consumer Behavior (Harrison / Khamitov)</option>
+          <option value="M303">BUS-M303 Marketing Research (4 Instructors)</option>
+          <option value="M346">BUS-M346 Marketing Analytics (Lalwani / Kong / Zhang)</option>
+          <option value="M450">BUS-M450 Marketing Strategy (Wooldridge)</option>
+        </select>
+        <div class="relative w-full sm:w-60">
           <input 
             type="text" 
             id="searchInput" 
             onkeyup="filterConcepts()" 
-            placeholder="Search concepts, frameworks, models..." 
-            class="w-full text-xs pl-8 pr-3 py-1.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white"
+            placeholder="Search concepts, courses, instructors..." 
+            class="w-full text-xs pl-8 pr-3 py-1.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white"
           />
           <svg class="w-4 h-4 text-slate-400 absolute left-2.5 top-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
         </div>
@@ -152,7 +170,7 @@
               <span class="text-xs font-normal text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-full">Interactive Tree Diagram</span>
             </h2>
             <p class="text-xs text-slate-500 mt-0.5">
-              Hover over <strong>Marketing</strong>, any of the <strong>4 Primary Branches</strong>, the <strong>18 Categories</strong>, or the <strong>50 Concepts</strong> to view its definition. Click any branch or category to expand/collapse, or click a concept for full details.
+              Hover over <strong>Marketing</strong>, any of the <strong>4 Primary Branches</strong>, the <strong>18 Categories</strong>, or the <strong>50 Concepts</strong> to view its definition and course coverage. Use the dropdown above to highlight specific courses or curriculum gaps on the tree.
             </p>
           </div>
           <div class="flex items-center gap-2 shrink-0">
@@ -311,18 +329,106 @@
       </div>
     </div>
 
+    <!-- VIEW 5: SYLLABUS COVERAGE & GAP ANALYSIS -->
+    <div id="syllabusView" class="hidden space-y-6">
+      
+      <!-- Top KPI Summary Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+          <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Total Syllabi Analyzed</div>
+          <div class="text-2xl font-extrabold text-slate-900 mt-1">15 Syllabi / 6 Courses</div>
+          <div class="text-xs text-slate-500 mt-1">M304 (2), M370 (3), M405 (2), M303 (4), M346 (3), M450 (1)</div>
+        </div>
+        <div class="bg-emerald-50/70 p-4 rounded-xl border border-emerald-200 shadow-sm">
+          <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-700">Core Reinforced &amp; Covered</div>
+          <div class="text-2xl font-extrabold text-emerald-900 mt-1">37 / 50 Concepts</div>
+          <div class="text-xs text-emerald-700 mt-1">74% consistently covered across required sequence</div>
+        </div>
+        <div class="bg-amber-50/70 p-4 rounded-xl border border-amber-200 shadow-sm">
+          <div class="text-[11px] font-bold uppercase tracking-wider text-amber-700">Instructor-Dependent Gaps</div>
+          <div class="text-2xl font-extrabold text-amber-900 mt-1">7 / 50 Concepts</div>
+          <div class="text-xs text-amber-800 mt-1">B2B Buying (#13-#14), M370 MR (#6), Digital (#40), Sustainability (#45)</div>
+        </div>
+        <div class="bg-rose-50/70 p-4 rounded-xl border border-rose-200 shadow-sm">
+          <div class="text-[11px] font-bold uppercase tracking-wider text-rose-700">True / Track Curriculum Gaps</div>
+          <div class="text-2xl font-extrabold text-rose-900 mt-1">6 / 50 Concepts</div>
+          <div class="text-xs text-rose-800 mt-1">Services (#24, #49), Retailing (#39), Inbound (#41), Global (#43, #44)</div>
+        </div>
+      </div>
+
+      <!-- Course-by-Course Objectives & Instructor Variations Accordion / Grid -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
+        <div>
+          <h3 class="text-base font-extrabold text-slate-900">Course-Level Learning Objectives &amp; Instructor Variations (Major Sequence)</h3>
+          <p class="text-xs text-slate-500">Extracted directly from the 15 Fall 2026 syllabi (excluding generic Kelley School program SLOs). Pathway: M304/M370 &rarr; M405 (no prereq) &rarr; M303 &amp; M346 (concurrent) &rarr; M450 (capstone).</p>
+        </div>
+        <div id="courseCardsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Injected via JS -->
+        </div>
+      </div>
+
+      <!-- 50-Concept x 6-Course Heatmap Matrix -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="p-4 border-b border-slate-200 bg-slate-50/50 flex flex-col md:flex-row md:items-center justify-between gap-3">
+          <div>
+            <h3 class="font-bold text-slate-900 text-sm">50-Concept &times; 6-Course Syllabus Coverage Heatmap</h3>
+            <p class="text-xs text-slate-500">
+              <span class="inline-block px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 font-mono text-[10px] font-bold mr-1">O+T</span> Objective + Weekly Topic &bull;
+              <span class="inline-block px-1.5 py-0.5 rounded bg-blue-100 text-blue-800 font-mono text-[10px] font-bold mx-1">T</span> Weekly Topic / Case / Sim &bull;
+              <span class="inline-block px-1.5 py-0.5 rounded bg-amber-100 text-amber-900 font-mono text-[10px] font-bold mx-1">Var</span> Instructor-Dependent &bull;
+              <span class="inline-block px-1.5 py-0.5 rounded bg-purple-100 text-purple-800 font-mono text-[10px] font-bold mx-1">O</span> Broad Objective Only &bull;
+              <span class="inline-block px-1.5 py-0.5 rounded bg-slate-100 text-slate-400 font-mono text-[10px] font-bold mx-1">&mdash;</span> Not Covered
+            </p>
+          </div>
+          <div class="flex items-center gap-2">
+            <select id="gapFilterSelect" onchange="renderSyllabusTable()" class="text-xs px-2.5 py-1.5 rounded-lg border border-slate-300 bg-white font-medium">
+              <option value="ALL">Show All 50 Concepts</option>
+              <option value="True Curriculum Gap">🔴 True Curriculum Gaps Only (6)</option>
+              <option value="Instructor-Dependent">🟡 Instructor-Dependent Variations Only (7)</option>
+              <option value="Core Reinforced">🟢 Core Reinforced Only (24)</option>
+              <option value="Covered">🔵 Covered (Standard) Only (13)</option>
+            </select>
+          </div>
+        </div>
+        <div class="overflow-x-auto custom-scroll">
+          <table class="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200 uppercase tracking-wider text-[10px]">
+                <th class="p-3 w-10 text-center">#</th>
+                <th class="p-3 w-48">Branch &amp; Category</th>
+                <th class="p-3 w-52">Marketing Concept</th>
+                <th class="p-3 w-24 text-center">M304<br><span class="font-normal text-[9px] text-slate-500">Honors (2)</span></th>
+                <th class="p-3 w-24 text-center">M370<br><span class="font-normal text-[9px] text-slate-500">Regular (3)</span></th>
+                <th class="p-3 w-24 text-center">M405<br><span class="font-normal text-[9px] text-slate-500">Cons. Beh (2)</span></th>
+                <th class="p-3 w-24 text-center">M303<br><span class="font-normal text-[9px] text-slate-500">Mktg Res (4)</span></th>
+                <th class="p-3 w-24 text-center">M346<br><span class="font-normal text-[9px] text-slate-500">Analytics (3)</span></th>
+                <th class="p-3 w-24 text-center">M450<br><span class="font-normal text-[9px] text-slate-500">Strategy (1)</span></th>
+                <th class="p-3 w-36 text-center">Gap / Status</th>
+                <th class="p-3">Syllabus Evidence &amp; Instructor Differences</th>
+              </tr>
+            </thead>
+            <tbody id="syllabusTableBody" class="divide-y divide-slate-100 text-slate-700">
+              <!-- Injected via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
   </main>
 
-  <!-- DETAIL MODAL (LIGHT-THEMED FORMULA BOX) -->
+  <!-- DETAIL MODAL (LIGHT-THEMED FORMULA BOX + SYLLABUS COVERAGE BREAKDOWN) -->
   <div id="conceptModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto custom-scroll shadow-2xl border border-slate-200 p-6 relative">
+    <div class="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto custom-scroll shadow-2xl border border-slate-200 p-6 relative">
       <button onclick="closeModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 p-1.5 rounded-lg hover:bg-slate-100">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
       </button>
 
-      <div class="flex items-center gap-2 mb-2">
+      <div class="flex flex-wrap items-center gap-2 mb-2">
         <span id="modalIdBadge" class="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-indigo-100 text-indigo-800">Concept #1</span>
         <span id="modalModuleBadge" class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-700">Module</span>
+        <span id="modalGapBadge" class="px-2.5 py-0.5 rounded-full text-xs font-bold">Status</span>
       </div>
 
       <h2 id="modalTitle" class="text-xl font-extrabold text-slate-900 mb-1">Concept Name</h2>
@@ -348,6 +454,12 @@
           <span class="font-bold uppercase tracking-wider text-slate-400 text-[10px]">Real-World Business Application</span>
           <p id="modalExample" class="mt-0.5 text-slate-700 bg-emerald-50 text-emerald-950 p-3 rounded-lg border border-emerald-200 leading-relaxed"></p>
         </div>
+
+        <!-- Course-by-Course Syllabus Coverage Breakdown -->
+        <div class="pt-2 border-t border-slate-200">
+          <span class="font-bold uppercase tracking-wider text-slate-400 text-[10px] block mb-2">Kelley UG Syllabus Coverage Across the 6 Required Courses (FA26)</span>
+          <div id="modalCoverageGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-2"></div>
+        </div>
       </div>
 
       <div class="mt-6 pt-4 border-t border-slate-200 flex justify-end">
@@ -358,594 +470,2180 @@
     </div>
   </div>
 
-  <!-- Full Undergraduate Curriculum Data Payload -->
+  <!-- Data Payload -->
   <script>
     const curriculumData = [
+  {
+    "id": "M1",
+    "name": "Strategic Foundations & Analytical Inputs",
+    "description": "Macro and micro situational scanning, marketing philosophy, foundational planning models, scientific research methods, and customer economics.",
+    "color": "#1e3a8a",
+    "light_color": "#eff6ff",
+    "border_color": "#3b82f6",
+    "categories": [
       {
-        "id": "M1",
-        "name": "Strategic Foundations & Analytical Inputs",
-        "description": "Macro and micro situational scanning, marketing philosophy, foundational planning models, scientific research methods, and customer economics.",
-        "color": "#1e3a8a",
-        "light_color": "#eff6ff",
-        "border_color": "#3b82f6",
-        "categories": [
+        "id": "C1",
+        "number": 1,
+        "name": "Marketing Orientations, Ethics & Social Responsibility",
+        "scope": "Fundamental business philosophies, ethical codes, and societal impact.",
+        "concepts": [
           {
-            "id": "C1",
-            "number": 1,
-            "name": "Marketing Orientations, Ethics & Social Responsibility",
-            "scope": "Fundamental business philosophies, ethical codes, and societal impact.",
-            "concepts": [
-              {
-                "id": 1,
-                "name": "The Marketing Concept & Orientation Evolution",
-                "textbook": "Kotler & Armstrong Ch. 1; Kotler & Keller Ch. 1",
-                "definition": "The organizational philosophy holding that achieving organizational goals depends on knowing the needs and wants of target markets and delivering the desired satisfactions better than competitors do.",
-                "framework": "Evolution of Marketing Eras: Production -> Product -> Selling -> Marketing -> Societal Marketing Concepts.",
-                "example": "Ford's early Model T reflected the Production concept ('any color as long as it's black'), whereas Patagonia epitomizes the Societal Marketing concept by urging customers to repair gear."
+            "id": 1,
+            "name": "The Marketing Concept & Orientation Evolution",
+            "textbook": "Kotler & Armstrong Ch. 1; Kotler & Keller Ch. 1; Grewal & Levy Ch. 1",
+            "definition": "The organizational philosophy holding that achieving organizational goals depends on knowing the needs and wants of target markets and delivering the desired satisfactions better than competitors do.",
+            "framework": "Evolution of Marketing Eras: Production -> Product -> Selling -> Marketing -> Societal Marketing Concepts.",
+            "example": "Ford's early Model T reflected the Production concept ('any color as long as it's black'), whereas Patagonia epitomizes the Societal Marketing concept by urging customers to repair gear.",
+            "coverage": {
+              "M304": {
+                "level": "O+T",
+                "detail": "Both Fossen & Godfrey: Obj 1 + Sess 1 (Marketing as a Business Discipline; customer-centric approach)"
               },
-              {
-                "id": 45,
-                "name": "Sustainable Marketing & Triple Bottom Line",
-                "textbook": "Kotler & Armstrong Ch. 20; Kerin & Hartley Ch. 4",
-                "definition": "Socially and environmentally responsible marketing that meets the present needs of consumers and businesses while preserving or enhancing the ability of future generations to meet their needs.",
-                "framework": "Triple Bottom Line (3Ps: People, Planet, Profit); Green Marketing vs. Greenwashing Audits.",
-                "example": "Unilever redesigning packaging across Dove and Seventh Generation to incorporate 100% PCR recycled plastic, linking sustainability directly to consumer brand loyalty."
+              "M370": {
+                "level": "O+T",
+                "detail": "All 3 (Marek, McManus, Blair): Obj 1 & 5 + Wk 1 Ch. 1 Overview of Marketing"
               },
-              {
-                "id": 46,
-                "name": "Marketing Ethics & Consumerism",
-                "textbook": "Kotler & Armstrong Ch. 20; Kerin & Hartley Ch. 4",
-                "definition": "Principles, values, and standards that govern conduct in the marketplace; consumerism is an organized grassroots and legislative movement to augment the rights and power of buyers relative to sellers.",
-                "framework": "AMA Code of Ethics (Do no harm, Foster trust, Embrace values: Honesty, Responsibility, Fairness, Respect, Transparency, Citizenship); JFK Consumer Bill of Rights.",
-                "example": "Apple deploying App Tracking Transparency (ATT) to safeguard user privacy against non-consensual third-party tracking."
+              "M405": {
+                "level": "T",
+                "detail": "Both Harrison & Khamitov: Sess 1-2 Intro to Consumer Behavior & Customer Value"
+              },
+              "M303": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M346": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M450": {
+                "level": "O+T",
+                "detail": "Wooldridge: Obj 1 + Lect 1 (The Four Marketing Principles MP1-MP4)"
               }
-            ]
+            },
+            "gap_status": "Core Reinforced",
+            "courses_count": 4
           },
           {
-            "id": "C2",
-            "number": 2,
-            "name": "Strategic Planning & Growth Formulations",
-            "scope": "Corporate and business-unit resource allocation, portfolio analysis, and competitive growth trajectories.",
-            "concepts": [
-              {
-                "id": 2,
-                "name": "Strategic Planning & BCG Growth-Share Matrix",
-                "textbook": "Kotler & Armstrong Ch. 2; Kerin & Hartley Ch. 2",
-                "definition": "A corporate portfolio-planning method that evaluates a company's Strategic Business Units (SBUs) in terms of market growth rate and relative market share to guide capital allocation.",
-                "framework": "Boston Consulting Group (BCG) Matrix: Stars (high growth, high share), Cash Cows (low growth, high share), Question Marks (high growth, low share), Dogs (low growth, low share).",
-                "example": "Apple funnels free cash flows generated by its mature iPhone line (Cash Cow) to fund R&D and market development for spatial computing (Apple Vision Pro, Question Mark)."
+            "id": 45,
+            "name": "Sustainable Marketing & Triple Bottom Line",
+            "textbook": "Kotler & Armstrong Ch. 20; Kerin & Hartley Ch. 4; Grewal & Levy Ch. 4",
+            "definition": "Socially and environmentally responsible marketing that meets the present needs of consumers and businesses while preserving or enhancing the ability of future generations to meet their needs.",
+            "framework": "Triple Bottom Line (3Ps: People, Planet, Profit); Green Marketing vs. Greenwashing Audits.",
+            "example": "Unilever redesigning packaging across Dove to incorporate 100% PCR recycled plastic, linking sustainability directly to consumer brand loyalty.",
+            "coverage": {
+              "M304": {
+                "level": "Var",
+                "detail": "Fossen Only [T]: Sess 23 'Stakeholder tradeoffs: Ethical marketing decision making'; Godfrey omits dedicated session"
               },
-              {
-                "id": 3,
-                "name": "Ansoff Product/Market Expansion Grid",
-                "textbook": "Kotler & Armstrong Ch. 2; Kerin & Hartley Ch. 2",
-                "definition": "A portfolio-planning tool for identifying company growth opportunities through market penetration, market development, product development, and diversification.",
-                "framework": "2x2 Matrix crossing Existing vs. New Products with Existing vs. New Markets: Market Penetration, Market Development, Product Development, Diversification.",
-                "example": "Starbucks expanding US store footprints and drive-thrus (Penetration), launching canned Nitro Cold Brew (Product Dev), entering international regions (Market Dev), and opening upscale Roasteries (Diversification)."
+              "M370": {
+                "level": "T",
+                "detail": "All 3 (Marek, McManus, Blair): Wk 2 Sess 2 Ch. 4 'Conscious Marketing, CSR and Ethics'"
               },
-              {
-                "id": 47,
-                "name": "Growth Strategies & Market Frontiering",
-                "textbook": "Kotler & Keller Ch. 2, 11; Kerin & Hartley Ch. 2",
-                "definition": "Strategic frameworks for establishing defensible competitive advantage and industry positioning across cost or differentiation frontiers.",
-                "framework": "Porter's Generic Competitive Strategies: Overall Cost Leadership, Differentiation, Cost Focus, Differentiation Focus.",
-                "example": "Walmart executes Cost Leadership through supply chain scale, while Apple maintains Differentiation through proprietary industrial design and integrated software ecosystems."
+              "M405": {
+                "level": "T",
+                "detail": "Both: Harrison Course Desc ('sustainable business practices') + Lab 1; Khamitov Solomon Ch. 2 'Consumer & Social Well-Being I & II' (2 sessions)"
+              },
+              "M303": {
+                "level": "Var",
+                "detail": "Welden Only [T]: Oct 15 'Marketing Research for Nonprofits, Public Policy, and Sustainability'; Liu, Cosguner, Vander Schee omit"
+              },
+              "M346": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M450": {
+                "level": "O",
+                "detail": "Wooldridge: Obj 8 ('role of marketing in addressing social and global issues'), no dedicated lecture"
               }
-            ]
+            },
+            "gap_status": "Instructor-Dependent",
+            "courses_count": 5
           },
           {
-            "id": "C3",
-            "number": 3,
-            "name": "Environmental Scanning & Value Delivery Networks",
-            "scope": "Macroenvironmental external forces, internal situational assessment, and end-to-end value chain linkages.",
-            "concepts": [
-              {
-                "id": 4,
-                "name": "Macro Environment Analysis (PESTLE)",
-                "textbook": "Kotler & Armstrong Ch. 3; Kerin & Hartley Ch. 3",
-                "definition": "The systemic tracking and analysis of uncontrollable macro forces that originate outside the immediate microenvironment and shape business risks and commercial opportunities.",
-                "framework": "PESTLE Framework: Political, Economic, Socio-Cultural, Technological, Legal, and Environmental forces.",
-                "example": "Plant-based meat manufacturers capitalizing on the socio-cultural macro shift toward health and environmental consciousness, while navigating food labeling laws regarding what qualifies as 'meat'."
+            "id": 46,
+            "name": "Marketing Ethics & Consumerism",
+            "textbook": "Kotler & Armstrong Ch. 20; Kerin & Hartley Ch. 4; Grewal & Levy Ch. 4",
+            "definition": "Principles, values, and standards that govern conduct in the marketplace; consumerism is an organized grassroots and legislative movement to augment the rights and power of buyers relative to sellers.",
+            "framework": "AMA Code of Ethics (Honesty, Responsibility, Fairness, Respect, Transparency, Citizenship); JFK Consumer Bill of Rights.",
+            "example": "Apple deploying App Tracking Transparency (ATT) to safeguard user privacy against non-consensual third-party tracking.",
+            "coverage": {
+              "M304": {
+                "level": "T",
+                "detail": "Fossen: Sess 23 Stakeholder Tradeoffs/Ethics; Godfrey: Sess 14 'Pricing IV: Recent trends & ethical concerns'"
               },
-              {
-                "id": 5,
-                "name": "SWOT & Situational Analysis",
-                "textbook": "Kotler & Armstrong Ch. 2; Grewal & Levy Ch. 2",
-                "definition": "A comprehensive strategic assessment evaluating an enterprise's internal controllable capabilities (Strengths, Weaknesses) alongside uncontrollable external conditions (Opportunities, Threats).",
-                "framework": "SWOT Matrix / TOWS Matrix: SO (Maxi-Maxi), WO (Mini-Maxi), ST (Maxi-Mini), WT (Mini-Mini) strategies.",
-                "example": "Tesla's internal strength in proprietary battery and software technology paired with the external opportunity of federal EV tax credits, weighed against manufacturing quality bottlenecks."
+              "M370": {
+                "level": "T",
+                "detail": "All 3: Wk 2 Sess 2 Ch. 4 'Conscious Marketing, CSR and Ethics'"
               },
-              {
-                "id": 48,
-                "name": "Value Chain & Value Delivery Network",
-                "textbook": "Kotler & Armstrong Ch. 2; Kotler & Keller Ch. 2",
-                "definition": "The series of internal departments that carry out value-creating activities, and the external network of company, suppliers, distributors, and customers who partner with each other to improve overall performance.",
-                "framework": "Porter's Value Chain (Primary activities: Inbound Logistics, Operations, Outbound Logistics, Marketing & Sales, Service; Support activities: Firm Infrastructure, HR, Tech, Procurement).",
-                "example": "Zara's tightly integrated in-house fabric dyeing and automated distribution hub enabling new garment designs to move from sketch to retail shelves in under 15 days."
+              "M405": {
+                "level": "O+T",
+                "detail": "Both: Harrison Obj 4 & 6 + Lab 1 + Quiz 1 'Foundations, Ethics, and Perception'; Khamitov Ch. 2 Well-Being & Nudging ethics"
+              },
+              "M303": {
+                "level": "O+T",
+                "detail": "Vander Schee: Obj 2 + Wk 1 Ethics + mandatory CITI IRB Cert; Cosguner: Obj 3 ethical primary collection; Welden: Oct 20 Ethics & AI in MR; Liu: Lect 10"
+              },
+              "M346": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M450": {
+                "level": "O",
+                "detail": "Wooldridge: Obj 7 ('Learn about ethical concerns within marketing')"
               }
-            ]
-          },
-          {
-            "id": "C4",
-            "number": 4,
-            "name": "Marketing Information Systems & Research Methodology",
-            "scope": "Scientific research designs, primary vs. secondary data collection, and intelligence systems.",
-            "concepts": [
-              {
-                "id": 6,
-                "name": "Marketing Research Process & Design",
-                "textbook": "Kotler & Armstrong Ch. 4; Kerin & Hartley Ch. 8",
-                "definition": "The systematic design, collection, analysis, and reporting of data relevant to a specific marketing situation facing an organization.",
-                "framework": "5-Step Scientific Process: (1) Define Problem & Objectives, (2) Develop Research Plan, (3) Collect Information, (4) Analyze & Develop Findings, (5) Take Marketing Actions.",
-                "example": "LEGO conducting immersive ethnographic and observational research to uncover why young girls were historically underrepresented among builders, creating the LEGO Friends line."
-              },
-              {
-                "id": 7,
-                "name": "Primary vs. Secondary & Qualitative vs. Quantitative",
-                "textbook": "Kotler & Armstrong Ch. 4; Grewal & Levy Ch. 10",
-                "definition": "Primary data is custom-gathered for the specific problem at hand; secondary data already exists from prior collection. Qualitative research explores underlying motives; quantitative seeks numerical measurement.",
-                "framework": "Research Typology Continuum: Exploratory (Focus groups, interviews) -> Descriptive (Surveys, scanner data) -> Causal (Laboratory experiments, A/B field testing).",
-                "example": "Netflix conducting live A/B experiments (Causal research) comparing two video thumbnail graphics across subscriber cohorts to observe true behavioral stream rates."
-              },
-              {
-                "id": 9,
-                "name": "Marketing Information Systems (MIS)",
-                "textbook": "Kotler & Armstrong Ch. 4; Kerin & Hartley Ch. 8",
-                "definition": "People, equipment, and procedures dedicated to assessing information needs, developing the needed information, and helping decision makers validate actionable customer insights.",
-                "framework": "Tripartite MIS Architecture: Internal Databases + Marketing Intelligence Activities + Marketing Research Studies.",
-                "example": "Marriott's guest intelligence system tracking previous stay history, preferred room temperature, and loyalty tier to customize digital booking and on-property experiences."
-              }
-            ]
-          },
-          {
-            "id": "C5",
-            "number": 5,
-            "name": "Customer Economics & Marketing Performance Analytics",
-            "scope": "Quantitative evaluation of customer acquisition costs, relationship valuation, and return on marketing investment.",
-            "concepts": [
-              {
-                "id": 8,
-                "name": "Customer Lifetime Value (CLV)",
-                "textbook": "Kotler & Armstrong Ch. 1, 20; Kotler & Keller Ch. 5",
-                "definition": "The total monetary value of the stream of purchases a customer must be expected to generate over a lifetime of patronage with the firm.",
-                "framework": "CLV = [Margin * Retention Rate] / [1 + Discount Rate - Retention Rate]; Customer Equity (summed CLV of all customer cohorts).",
-                "example": "Starbucks calculating that a loyal coffee customer represents over $14,000 in net present value over a 10-year horizon, justifying significant investments in app gamification."
-              },
-              {
-                "id": 50,
-                "name": "Marketing Metrics & Performance Analytics",
-                "textbook": "Kotler & Armstrong Ch. 2; Kotler & Keller Ch. 4",
-                "definition": "Formal quantitative metrics evaluating the economic effectiveness and efficiency of marketing expenditures.",
-                "framework": "Return on Marketing Investment: ROMI = (Net Marketing Contribution / Marketing Expenses) * 100%; CAC = Total Acquisition Spend / New Customers; LTV/CAC Ratio benchmark (3:1).",
-                "example": "A SaaS subscription firm spending $500,000 on digital acquisition channels to land 2,500 subscribers, yielding a CAC of $200 against a $750 CLV (healthy 3.75:1 ratio)."
-              }
-            ]
+            },
+            "gap_status": "Core Reinforced",
+            "courses_count": 5
           }
         ]
       },
       {
-        "id": "M2",
-        "name": "Buyer Behavior & Strategic Formulation (STP)",
-        "description": "Individual consumer cognitive stages, organizational B2B buying centers, market segmentation bases, targeting criteria, and competitive positioning.",
-        "color": "#047857",
-        "light_color": "#ecfdf5",
-        "border_color": "#10b981",
-        "categories": [
+        "id": "C2",
+        "number": 2,
+        "name": "Strategic Planning & Growth Formulations",
+        "scope": "Corporate and business-unit resource allocation, portfolio analysis, and competitive growth trajectories.",
+        "concepts": [
           {
-            "id": "C6",
-            "number": 6,
-            "name": "Consumer Behavior & Decision Psychology",
-            "scope": "Buyer decision stages, internal psychological motivations, and postpurchase cognitive dynamics.",
-            "concepts": [
-              {
-                "id": 10,
-                "name": "Consumer Purchase Decision Process",
-                "textbook": "Kotler & Armstrong Ch. 5; Kerin & Hartley Ch. 5",
-                "definition": "The five-stage cognitive and behavioral process through which consumers move when recognizing a need and selecting an offering.",
-                "framework": "5-Stage Model: Need Recognition -> Information Search -> Evaluation of Alternatives -> Purchase Decision -> Postpurchase Behavior.",
-                "example": "A college student realizing their laptop is lagging (Need Recognition), reading Reddit reviews (Information Search), comparing MacBook Air vs. Dell XPS (Evaluation), buying online (Purchase), and assessing battery life (Postpurchase)."
+            "id": 2,
+            "name": "Strategic Planning & BCG Growth-Share Matrix",
+            "textbook": "Kotler & Armstrong Ch. 2; Kerin & Hartley Ch. 2; Grewal & Levy Ch. 2",
+            "definition": "A corporate portfolio-planning method that evaluates a company's Strategic Business Units (SBUs) in terms of market growth rate and relative market share to guide capital allocation.",
+            "framework": "Boston Consulting Group (BCG) Matrix: Stars, Cash Cows, Question Marks, Dogs.",
+            "example": "Apple funnels free cash flows generated by its mature iPhone line (Cash Cow) to fund R&D and market development for spatial computing (Apple Vision Pro, Question Mark).",
+            "coverage": {
+              "M304": {
+                "level": "O+T",
+                "detail": "Both: Obj 2 & 6 + I-Core Business Plan resource & portfolio strategy"
               },
-              {
-                "id": 11,
-                "name": "Cognitive Dissonance",
-                "textbook": "Kotler & Armstrong Ch. 5; Kerin & Hartley Ch. 5",
-                "definition": "Buyer discomfort caused by postpurchase conflict; psychological tension when questioning whether one made the optimal brand decision.",
-                "framework": "Expectancy-Disconfirmation Model; Postpurchase Reassurance Strategies (warranties, follow-up calls).",
-                "example": "Car dealerships sending congratulatory letters, highlighting safety awards, and providing free initial maintenance visits immediately following vehicle delivery."
+              "M370": {
+                "level": "O+T",
+                "detail": "All 3: Obj 1 & 5 + Wk 2 Sess 1 Ch. 2 'Developing Marketing Strategies and a Marketing Plan' (BCG Matrix)"
               },
-              {
-                "id": 12,
-                "name": "Psychological & Social Influences",
-                "textbook": "Kotler & Armstrong Ch. 5; Grewal & Levy Ch. 6",
-                "definition": "Internal psychological forces (motivation, perception, learning, attitudes) and external socio-cultural forces (culture, reference groups, opinion leaders) shaping purchase choices.",
-                "framework": "Maslow's Hierarchy of Needs; Selective Perception (Attention, Distortion, Retention); Reference Group Typologies (Aspirational, Associative, Dissociative).",
-                "example": "Rolex marketing to esteem and self-actualization needs, while Nike enlists elite athletes as aspirational reference figures for amateur runners."
+              "M405": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M303": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M346": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M450": {
+                "level": "O+T",
+                "detail": "Wooldridge: Obj 1 + Lect 8 'Managing Resource Trade-Offs' (Ch. 8) + BRT Case + MARKSTRAT multi-brand portfolio allocation"
               }
-            ]
+            },
+            "gap_status": "Covered",
+            "courses_count": 3
           },
           {
-            "id": "C7",
-            "number": 7,
-            "name": "B2B Organizational Buying & Procurement",
-            "scope": "Formal multi-stakeholder organizational buying centers and institutional purchase situations.",
-            "concepts": [
-              {
-                "id": 13,
-                "name": "B2B Buying Center Dynamics",
-                "textbook": "Kotler & Armstrong Ch. 6; Kerin & Hartley Ch. 6",
-                "definition": "The decision-making unit of a buying organization consisting of all individuals and units who participate in the business purchase decision.",
-                "framework": "5 Core Buying Roles: Users, Influencers, Buyers, Deciders, Gatekeepers.",
-                "example": "A hospital acquiring an MRI scanner where radiologists act as Influencers, the CFO serves as Decider, procurement agents act as Buyers, and department assistants serve as Gatekeepers."
+            "id": 3,
+            "name": "Ansoff Product/Market Expansion Grid",
+            "textbook": "Kotler & Armstrong Ch. 2; Kerin & Hartley Ch. 2; Grewal & Levy Ch. 2",
+            "definition": "A portfolio-planning tool for identifying company growth opportunities through market penetration, market development, product development, and diversification.",
+            "framework": "2x2 Matrix crossing Existing vs. New Products with Existing vs. New Markets: Market Penetration, Market Development, Product Development, Diversification.",
+            "example": "Starbucks expanding US store footprints (Penetration), launching canned Nitro Cold Brew (Product Dev), entering new countries (Market Dev), and opening Roasteries (Diversification).",
+            "coverage": {
+              "M304": {
+                "level": "O+T",
+                "detail": "Fossen: Obj 2 + Sess 2 & 8 'Market entry strategies'; Godfrey: Obj 2 + Sess 2 Innovation & Sess 7 Competitive Opportunities"
               },
-              {
-                "id": 14,
-                "name": "B2B Buy Classes / Buying Situations",
-                "textbook": "Kotler & Armstrong Ch. 6; Kerin & Hartley Ch. 6",
-                "definition": "The three standard organizational purchase situations defined by problem novelty, information requirements, and risk level.",
-                "framework": "Buying Classes: Straight Rebuy (routine reorder), Modified Rebuy (changing specs, terms, suppliers), New Task (first-time purchase with exhaustive evaluation).",
-                "example": "An office reordering printer paper automatically (Straight Rebuy) versus evaluating corporate cloud enterprise software vendors for the first time (New Task)."
+              "M370": {
+                "level": "O+T",
+                "detail": "All 3: Obj 1 + Wk 2 Sess 1 Ch. 2 Marketing Strategy (Ansoff 4 growth strategies)"
+              },
+              "M405": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M303": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M346": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M450": {
+                "level": "O+T",
+                "detail": "Wooldridge: Obj 1 + Lect 3, 4, 6 + MARKSTRAT Sonite penetration/product dev vs. Vodite diversification"
               }
-            ]
+            },
+            "gap_status": "Covered",
+            "courses_count": 3
           },
           {
-            "id": "C8",
-            "number": 8,
-            "name": "Market Segmentation & Target Market Strategy",
-            "scope": "Dividing heterogeneous consumer markets and selecting optimal segment coverage strategies.",
-            "concepts": [
-              {
-                "id": 15,
-                "name": "Market Segmentation Bases",
-                "textbook": "Kotler & Armstrong Ch. 7; Kerin & Hartley Ch. 9",
-                "definition": "Dividing a broad, heterogeneous market into distinct subsets of buyers with common needs, characteristics, or behaviors.",
-                "framework": "4 Core Segmentation Bases: Geographic (climate, density), Demographic (age, income, gender), Psychographic (lifestyle, values), Behavioral (occasions, benefits sought, loyalty rate).",
-                "example": "Planet Fitness segmenting psychographically based on attitude toward gyms ('Judgement Free Zone' for casual exercisers intimidated by bodybuilder culture)."
+            "id": 47,
+            "name": "Growth Strategies & Market Frontiering",
+            "textbook": "Kotler & Keller Ch. 2, 11; Palmatier & Sridhar Ch. 4-7",
+            "definition": "Strategic frameworks for establishing defensible Sustainable Competitive Advantage (SCA) and industry positioning across cost, differentiation, or focus frontiers.",
+            "framework": "Porter's Generic Competitive Strategies (Cost Leadership, Differentiation, Focus); BOR Stack for SCAs (Brands, Offerings, Relationships).",
+            "example": "Walmart executes Cost Leadership through supply chain scale, while Apple maintains Differentiation through proprietary design and ecosystem integration.",
+            "coverage": {
+              "M304": {
+                "level": "O+T",
+                "detail": "Fossen: Obj 2 + Sess 6-7 'Analyzing competitors to find your SCA'; Godfrey: Obj 2 + Sess 6 'BOR Stack for SCAs' & Sess 7"
               },
-              {
-                "id": 16,
-                "name": "Target Market Selection Strategies",
-                "textbook": "Kotler & Armstrong Ch. 7; Kerin & Hartley Ch. 9",
-                "definition": "Evaluating each market segment's attractiveness and selecting one or more target segments to enter based on strategic fit.",
-                "framework": "Coverage Spectrum: Undifferentiated / Mass -> Differentiated / Segmented -> Concentrated / Niche -> Micromarketing (Local/Individual). Effective criteria: MASDA.",
-                "example": "Rolls-Royce utilizing Concentrated Niche marketing for ultra-wealthy buyers, while Procter & Gamble deploys Differentiated marketing via Tide, Gain, and Cheer."
-              }
-            ]
-          },
-          {
-            "id": "C9",
-            "number": 9,
-            "name": "Differentiation, Value Proposition & Positioning",
-            "scope": "Establishing competitive points of difference, perceptual mapping, and formal brand positioning statements.",
-            "concepts": [
-              {
-                "id": 17,
-                "name": "Value Proposition & Perceptual Mapping",
-                "textbook": "Kotler & Armstrong Ch. 7; Kerin & Hartley Ch. 9",
-                "definition": "The full positioning of a brand—the full mix of benefits on which it is differentiated; visualized spatially through perceptual mapping along key consumer evaluative criteria.",
-                "framework": "2D Perceptual / Brand Positioning Map (Attribute X vs. Attribute Y); Value Proposition Options (More for More, More for the Same, More for Less, etc.).",
-                "example": "Automotive perceptual map plotting luxury vs. economy and sporty vs. conservative, revealing Porsche in high-price/high-performance and Subaru in moderate-price/all-weather utility."
+              "M370": {
+                "level": "T",
+                "detail": "All 3: Wk 2 Sess 1 Ch. 2 Sustainable Competitive Advantage"
               },
-              {
-                "id": 18,
-                "name": "Positioning Statement Formulation",
-                "textbook": "Kotler & Armstrong Ch. 7; Kotler & Keller Ch. 10",
-                "definition": "A succinct, internal articulation summarizing brand position relative to alternatives, highlighting target audience, frame of reference, and primary point of difference.",
-                "framework": "Formula: 'To [Target Segment and Need], our [Brand] is the [Concept/Category] that [Point of Difference / Primary Benefit] because [Reason to Believe]'. Points of Parity vs. Points of Difference.",
-                "example": "'For athletes seeking maximum stamina, Gatorade is the sports beverage that rehydrates faster than water because of its scientifically proven electrolyte-carbohydrate formula.'"
+              "M405": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M303": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M346": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M450": {
+                "level": "O+T",
+                "detail": "Wooldridge: Core Spine \u2014 Lect 4 'Managing SCA (MP3)', Lect 5 'Brand-Based SCA', Lect 6 'Offering-Based SCA', Lect 7 'Relationship-Based SCA'"
               }
-            ]
+            },
+            "gap_status": "Core Reinforced",
+            "courses_count": 3
           }
         ]
       },
       {
-        "id": "M3",
-        "name": "The Tactical Marketing Mix (4 Ps)",
-        "description": "The operational marketing engine: Product levels, lifecycle, and brand equity; Services marketing; Pricing economics and tactics; Distribution channels and omnichannel logistics; and Integrated Marketing Communications.",
-        "color": "#b45309",
-        "light_color": "#fffbeb",
-        "border_color": "#f59e0b",
-        "categories": [
+        "id": "C3",
+        "number": 3,
+        "name": "Environmental Scanning & Value Delivery Networks",
+        "scope": "Macroenvironmental external forces, internal situational assessment, and end-to-end value chain linkages.",
+        "concepts": [
           {
-            "id": "C10",
-            "number": 10,
-            "name": "Product Architecture & Brand Management",
-            "scope": "Concentric product value layers, mix/line dimensions, and brand equity deployment strategies.",
-            "concepts": [
-              {
-                "id": 19,
-                "name": "The Three Levels of Product",
-                "textbook": "Kotler & Armstrong Ch. 8; Kotler & Keller Ch. 12",
-                "definition": "The conceptual model viewing a product as a concentric bundle of value delivered across three layers.",
-                "framework": "Concentric Levels: (1) Core Customer Value (fundamental problem solved), (2) Actual Product (brand, features, design, packaging, quality), (3) Augmented Product (warranty, delivery, customer support).",
-                "example": "A smartphone buyer purchases connectivity and instant access (Core Value), the iPhone hardware and iOS software (Actual Product), and AppleCare warranty and iCloud backup (Augmented Product)."
+            "id": 4,
+            "name": "Macro Environment Analysis (PESTLE)",
+            "textbook": "Kotler & Armstrong Ch. 3; Grewal & Levy Ch. 5",
+            "definition": "The systemic tracking and analysis of uncontrollable macro forces that originate outside the immediate microenvironment and shape business risks and commercial opportunities.",
+            "framework": "PESTLE / CDSTEP Framework: Cultural, Demographic, Social, Technological, Economic, and Political/Legal forces.",
+            "example": "Plant-based meat manufacturers capitalizing on the socio-cultural macro shift toward health and sustainability while navigating food labeling regulations.",
+            "coverage": {
+              "M304": {
+                "level": "O+T",
+                "detail": "Both: Obj 2 market opportunity assessment & external trend analysis for Business Plan"
               },
-              {
-                "id": 20,
-                "name": "Product Line & Mix Portfolio Decisions",
-                "textbook": "Kotler & Armstrong Ch. 8; Kerin & Hartley Ch. 10",
-                "definition": "Managing the set of all product lines and items that a seller offers: product mix width, length, depth, and consistency.",
-                "framework": "Product Mix Dimensions: Width (# of distinct lines), Length (total items in lines), Depth (# of versions/variants per item), Consistency (relatedness in end-use/production).",
-                "example": "Colgate managing mix Width across oral care, personal care, and pet nutrition, with deep Depth in oral care (Total, Optic White, Sensitive, Max Fresh)."
+              "M370": {
+                "level": "T",
+                "detail": "All 3: Wk 3 Sess 2 Ch. 5 'Analyzing the Marketing Environment' (CDSTEP framework)"
               },
-              {
-                "id": 23,
-                "name": "Brand Equity & Brand Architecture",
-                "textbook": "Kotler & Armstrong Ch. 8; Kotler & Keller Ch. 11",
-                "definition": "The differential effect that knowing the brand name has on customer response to the product; brand architecture governs how corporate and product brands are structured.",
-                "framework": "Brand Asset Valuator (Differentiation, Relevance, Esteem, Knowledge); Brand Development Matrix: Line Extension, Brand Extension, Multibrands, New Brands.",
-                "example": "Coca-Cola launching Diet Coke (Line Extension); Caterpillar expanding into heavy-duty work boots (Brand Extension); Procter & Gamble operating Tide and Gain (Multibrand)."
+              "M405": {
+                "level": "T",
+                "detail": "Harrison: Consulting Stage 2 'Industry/Buyer Trends'; Khamitov: Ch. 11-14 Demographic, Social Class, Subcultural & Cultural forces"
+              },
+              "M303": {
+                "level": "Var",
+                "detail": "Vander Schee Only [T]: Wk 3 MRA01 'Industry and Organization' secondary scan"
+              },
+              "M346": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M450": {
+                "level": "T",
+                "detail": "Wooldridge: Lect 3 'Managing Customer Change' & external market turbulence"
               }
-            ]
+            },
+            "gap_status": "Core Reinforced",
+            "courses_count": 5
           },
           {
-            "id": "C11",
-            "number": 11,
-            "name": "Innovation, New Product Development & Life Cycle",
-            "scope": "Stage-gate commercialization funnels, technology diffusion curves, and stage-by-stage PLC strategies.",
-            "concepts": [
-              {
-                "id": 21,
-                "name": "Product Life Cycle (PLC)",
-                "textbook": "Kotler & Armstrong Ch. 9; Kerin & Hartley Ch. 11",
-                "definition": "The course of a product's sales and profits over its lifetime across four distinct commercial stages.",
-                "framework": "4 PLC Stages: Introduction (build awareness, negative profits) -> Growth (rapid sales climb, profit peaks) -> Maturity (peak sales, intense rivalry) -> Decline (harvest or drop).",
-                "example": "Physical DVD media is in Decline; standard smartphones are in late Maturity; Electric Vehicles are in rapid Growth; commercial quantum computing hardware is in Introduction."
+            "id": 5,
+            "name": "SWOT & Situational Analysis",
+            "textbook": "Kotler & Armstrong Ch. 2; Grewal & Levy Ch. 2",
+            "definition": "A comprehensive strategic assessment evaluating an enterprise's internal controllable capabilities (Strengths, Weaknesses) alongside uncontrollable external conditions (Opportunities, Threats).",
+            "framework": "SWOT Matrix / TOWS Strategic Matching Framework (SO, WO, ST, WT); 3Cs Situation Analysis (Customers, Competitors, Company).",
+            "example": "Tesla pairing its internal battery technology strength with federal EV tax credit opportunities against rising low-cost EV competition.",
+            "coverage": {
+              "M304": {
+                "level": "O+T",
+                "detail": "Both: Explicitly in Obj 2 ('evaluating customers, competitors, and the company's strengths and weaknesses') + Sess 6-7"
               },
-              {
-                "id": 22,
-                "name": "New Product Development (NPD) & Diffusion",
-                "textbook": "Kotler & Armstrong Ch. 9; Kerin & Hartley Ch. 10, 11",
-                "definition": "The systematic 8-stage funnel for developing new offerings, and the sociological diffusion curve tracking innovation adoption across consumer cohorts.",
-                "framework": "8-Stage NPD Funnel (Idea generation to Commercialization); Rogers' Adoption Curve: Innovators (2.5%), Early Adopters (13.5%), Early Majority (34%), Late Majority (34%), Laggards (16%).",
-                "example": "Tech enthusiasts camping outside stores for the first 2007 iPhone (Innovators/Early Adopters) versus mainstream buyers upgrading only after 4G networks became ubiquitous (Late Majority)."
+              "M370": {
+                "level": "T",
+                "detail": "All 3: Wk 2 Sess 1 Ch. 2 SWOT Analysis + I-Core Integrative Case"
+              },
+              "M405": {
+                "level": "Var",
+                "detail": "Harrison Only [T]: Consulting Project Stage 2 'SWOT and Industry/Buyer Trends'; Khamitov omits SWOT"
+              },
+              "M303": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M346": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M450": {
+                "level": "O+T",
+                "detail": "Wooldridge: Obj 1 + Case workshops & MARKSTRAT firm/competitor situational audits"
               }
-            ]
+            },
+            "gap_status": "Core Reinforced",
+            "courses_count": 4
           },
           {
-            "id": "C12",
-            "number": 12,
-            "name": "Services Marketing & Service Quality Delivery",
-            "scope": "Unique service challenges (the 4 Is / IHIP), expanded 7 Ps marketing mix, and service gap minimization.",
-            "concepts": [
-              {
-                "id": 24,
-                "name": "Services Marketing & The 7 Ps",
-                "textbook": "Kotler & Armstrong Ch. 8; Kerin & Hartley Ch. 12",
-                "definition": "The unique marketing principles required for intangible economic activities, characterized by the 4 Is and managed through the extended 7 Ps mix.",
-                "framework": "The 4 Is (IHIP): Intangibility, Inseparability, Inconsistency/Variability, Inventory/Perishability. The Extended 7 Ps: 4 Ps + People, Process, Physical Evidence.",
-                "example": "Airlines cannot inventory unsold seats from Flight 100 once departure occurs (Perishability); passenger satisfaction depends on flight attendant interactions (Inconsistency/People)."
+            "id": 48,
+            "name": "Value Chain & Value Delivery Network",
+            "textbook": "Kotler & Armstrong Ch. 2, 12; Grewal & Levy Ch. 15",
+            "definition": "The series of internal departments that carry out value-creating activities, and the external network of company, suppliers, distributors, and customers who partner to improve overall system performance.",
+            "framework": "Porter's Value Chain (Primary & Support Activities); Upstream Supplier + Internal Operations + Downstream Channel Value Delivery Network.",
+            "example": "Zara's tightly integrated in-house dyeing and automated distribution hub enabling new designs to move from sketch to store shelves in under 15 days.",
+            "coverage": {
+              "M304": {
+                "level": "T",
+                "detail": "Fossen: Sess 20 'Channel strategy and operational execution (Joint Marketing-Operations Session)'; Godfrey: Sess 20 'Partner Relationship Management'"
               },
-              {
-                "id": 49,
-                "name": "The Service Gap Model",
-                "textbook": "Grewal & Levy Ch. 13; Kotler & Keller Ch. 14",
-                "definition": "A systematic diagnostic framework identifying five critical discrepancies that cause service delivery failures between customer expectations and actual service delivery.",
-                "framework": "Parasuraman, Zeithaml & Berry Gap Model: Gap 1 (Knowledge), Gap 2 (Standards), Gap 3 (Delivery), Gap 4 (Communication), Gap 5 (Service Quality / Expectation Disconfirmation).",
-                "example": "A hotel advertising 5-minute express room service (Communication) that takes 45 minutes due to understaffed kitchens (Delivery Gap), creating a perceived service breakdown."
+              "M370": {
+                "level": "T",
+                "detail": "All 3: Wk 11/12 Ch. 15 'Supply Chain and Channel Management'"
+              },
+              "M405": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M303": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M346": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M450": {
+                "level": "T",
+                "detail": "Wooldridge: Lect 7 'Managing Relationship-Based SCA' + AIRCO & Apex Industrial Solution cases"
               }
-            ]
-          },
-          {
-            "id": "C13",
-            "number": 13,
-            "name": "Pricing Fundamentals, Economics & Tactical Strategies",
-            "scope": "Cost/value pricing foundations, demand elasticity, break-even mechanics, and tactical new-product/portfolio price setting.",
-            "concepts": [
-              {
-                "id": 25,
-                "name": "Major Pricing Orientations",
-                "textbook": "Kotler & Armstrong Ch. 10; Grewal & Levy Ch. 14",
-                "definition": "The three fundamental orientations used to determine base price: customer value-based pricing, cost-based pricing, and competition-based pricing.",
-                "framework": "Customer Value-Based (Target Costing) vs. Cost-Based (Cost-Plus Markup) vs. Competitor-Based parity.",
-                "example": "Enterprise software pricing seats at $150/month based on the high productivity savings generated for corporate clients (Value-Based), rather than the negligible server hosting costs."
-              },
-              {
-                "id": 26,
-                "name": "Price Elasticity of Demand",
-                "textbook": "Kotler & Armstrong Ch. 10; Kerin & Hartley Ch. 13",
-                "definition": "A quantitative measure of consumer demand responsiveness to a percentage change in price.",
-                "framework": "Elasticity Formula: Ed = (% Change in Quantity Demanded) / (% Change in Price). Elastic (|Ed| > 1): price cut increases total revenue. Inelastic (|Ed| < 1): price hike increases total revenue.",
-                "example": "Prescription insulin is highly Inelastic (|Ed| < 1) because patients have no substitute, whereas leisure cruise vacation bookings are highly Elastic (|Ed| > 1)."
-              },
-              {
-                "id": 27,
-                "name": "Break-Even Analysis & Margin Mechanics",
-                "textbook": "Kotler & Armstrong Ch. 10; Kerin & Hartley Ch. 13",
-                "definition": "Determining the sales volume at which total revenue equals total cost, generating zero profit, and analyzing contribution margin.",
-                "framework": "Break-Even Quantity: BEQ = Fixed Costs / (Unit Price - Unit Variable Cost), where denominator is the Unit Contribution Margin.",
-                "example": "A theater with $120,000 fixed production costs, charging $60 per ticket with $20 variable costs per patron ($40 contribution margin), must sell 3,000 tickets to break even."
-              },
-              {
-                "id": 28,
-                "name": "New Product Pricing Strategies",
-                "textbook": "Kotler & Armstrong Ch. 11; Kerin & Hartley Ch. 13",
-                "definition": "Pricing strategies used during initial market introduction: market-skimming versus market-penetration pricing.",
-                "framework": "Market-Skimming (high initial price skimming top demand layer) vs. Market-Penetration (low initial price rapidly acquiring mass market share).",
-                "example": "Sony launching PlayStation 3 at $599 to skim hardcore gaming enthusiasts (Skimming); Disney+ launching at $6.99/mo to rapidly acquire 100M+ subscribers (Penetration)."
-              },
-              {
-                "id": 29,
-                "name": "Product Mix & Tactical Pricing",
-                "textbook": "Kotler & Armstrong Ch. 11; Kotler & Keller Ch. 16",
-                "definition": "Setting prices for a portfolio of related products to maximize profits on the total mix, and adapting prices through dynamic adjustments.",
-                "framework": "Product Mix Tactics: Captive-Product Pricing, Product Line Pricing, Bundle Pricing, Dynamic Pricing / Segmented Yield Management.",
-                "example": "HP selling printers at break-even and pricing proprietary ink cartridges at high margins (Captive-Product Pricing); Uber adjusting rates in real-time via surge pricing algorithms."
-              }
-            ]
-          },
-          {
-            "id": "C14",
-            "number": 14,
-            "name": "Marketing Channels & Distribution Governance",
-            "scope": "Channel levels, distribution intensity, and vertical marketing systems overcoming channel conflict.",
-            "concepts": [
-              {
-                "id": 35,
-                "name": "Marketing Channels & Structure",
-                "textbook": "Kotler & Armstrong Ch. 12; Kerin & Hartley Ch. 15",
-                "definition": "A set of interdependent organizations that make a product or service available for use or consumption; direct vs. indirect intermediary tiers.",
-                "framework": "Direct Channel (Producer -> Consumer) vs. Indirect Channel (Producer -> Wholesaler -> Retailer -> Consumer); Intermediary Value Creation (Time, Place, Possession Utility).",
-                "example": "Tesla utilizing Direct-to-Consumer showrooms without franchised car dealers, while Coca-Cola distributes through multi-layered indirect bottler and retailer networks."
-              },
-              {
-                "id": 36,
-                "name": "Distribution Intensity Strategies",
-                "textbook": "Kotler & Armstrong Ch. 12; Kerin & Hartley Ch. 15",
-                "definition": "The density of intermediaries used at each channel level to achieve appropriate market coverage.",
-                "framework": "3 Intensity Levels: Intensive Distribution (every available outlet), Selective Distribution (curated subset of outlets), Exclusive Distribution (one franchised dealer per geographic market).",
-                "example": "Snickers candy bars use Intensive distribution; Apple MacBooks use Selective distribution (Best Buy, Apple Stores); Lamborghini uses Exclusive distribution."
-              },
-              {
-                "id": 37,
-                "name": "Vertical Marketing Systems (VMS)",
-                "textbook": "Kotler & Armstrong Ch. 12; Kerin & Hartley Ch. 15",
-                "definition": "A unified channel structure where producers, wholesalers, and retailers act as a coordinated system to eliminate channel conflict.",
-                "framework": "3 VMS Architectures: Corporate VMS (common ownership across stages), Contractual VMS (franchise legal agreements), Administered VMS (power exerted by channel captain).",
-                "example": "Zara owning design, manufacturing, and retail stores (Corporate VMS); Subway coordinating independent franchisees (Contractual VMS); Walmart dominating supplier terms (Administered VMS)."
-              }
-            ]
-          },
-          {
-            "id": "C15",
-            "number": 15,
-            "name": "Retailing, Wholesaling & Omnichannel Systems",
-            "scope": "Retail institutional formats, merchant vs. agent intermediaries, and unified commerce logistics.",
-            "concepts": [
-              {
-                "id": 38,
-                "name": "Multichannel & Omnichannel Logistics",
-                "textbook": "Kotler & Armstrong Ch. 12, 13; Grewal & Levy Ch. 16",
-                "definition": "Integrating in-store, digital, and mobile touchpoints into a unified customer shopping journey, backed by integrated supply chain fulfillment.",
-                "framework": "Unified Commerce Model; BOPIS (Buy Online, Pick Up In Store); Reverse Logistics & Inventory Turnover Velocity.",
-                "example": "Target enabling shoppers to browse products via mobile app, place orders for 2-hour drive-up curbside pickup, or make seamless returns at the physical service desk."
-              },
-              {
-                "id": 39,
-                "name": "Retailing & Wholesaling Dynamics",
-                "textbook": "Kotler & Armstrong Ch. 13; Kerin & Hartley Ch. 16",
-                "definition": "All activities involved in selling goods directly to consumers for personal use, and wholesaling activities selling to business intermediaries.",
-                "framework": "The Wheel of Retailing (Low-status/low-margin entry -> upgrades amenities/costs -> vulnerable to new discounters); Merchant Wholesalers vs. Agents/Brokers.",
-                "example": "Discount retailers like Aldi entering with bare-bones fixtures and rock-bottom prices, while traditional grocers upgrade upscale amenities, creating cyclic retail evolution."
-              }
-            ]
-          },
-          {
-            "id": "C16",
-            "number": 16,
-            "name": "Integrated Marketing Communications & Promotion Strategy",
-            "scope": "Promotional mix consistency, push/pull trade flows, AIDA consumer response funnels, and communication budgeting.",
-            "concepts": [
-              {
-                "id": 30,
-                "name": "Integrated Marketing Communications (IMC)",
-                "textbook": "Kotler & Armstrong Ch. 14; Kerin & Hartley Ch. 17",
-                "definition": "Carefully integrating and coordinating the company's many communications channels to deliver a clear, consistent, and compelling message across all brand touchpoints.",
-                "framework": "Message Synergy Model; Cross-Channel Touchpoint Integration (preventing disjointed brand messaging).",
-                "example": "Apple's 'Shot on iPhone' campaign coordinating outdoor billboards, digital YouTube video spots, Instagram user-generated hashtags, and retail store displays."
-              },
-              {
-                "id": 31,
-                "name": "The Promotion Mix Elements",
-                "textbook": "Kotler & Armstrong Ch. 14; Kerin & Hartley Ch. 17",
-                "definition": "The specific blend of five promotional tools used to persuasively communicate customer value.",
-                "framework": "5 Promotional Elements: Advertising (paid nonpersonal mass media), Personal Selling (interpersonal sales force), Sales Promotion (short-term purchase incentives), Public Relations (unpaid publicity and corporate goodwill), Direct/Digital Marketing (targeted individual communication).",
-                "example": "Red Bull utilizing extreme sports sponsorships (PR), campus ambassador free product trials (Sales Promotion), TV commercials (Advertising), and TikTok clips (Digital)."
-              },
-              {
-                "id": 32,
-                "name": "Push vs. Pull Promotion Strategies",
-                "textbook": "Kotler & Armstrong Ch. 14; Kerin & Hartley Ch. 17",
-                "definition": "Strategic orientation of promotional spending: directing marketing toward channel intermediaries (Push) versus end consumers (Pull).",
-                "framework": "Push Flow: Producer -> Wholesaler -> Retailer -> Consumer (Trade spiffs, wholesale discounts). Pull Flow: Consumer -> Retailer -> Wholesaler -> Producer (Direct-to-consumer advertising).",
-                "example": "Pharmaceutical companies airing Direct-to-Consumer TV ads urging viewers to 'ask your doctor about Brand X' (Pull), versus industrial parts makers offering volume spiffs to distributors (Push)."
-              },
-              {
-                "id": 33,
-                "name": "The AIDA Model & Hierarchy of Effects",
-                "textbook": "Kotler & Armstrong Ch. 14; Kerin & Hartley Ch. 17",
-                "definition": "The sequential stages of consumer psychological processing that marketing communications must guide a prospect through.",
-                "framework": "AIDA Funnel: Attention (Awareness) -> Interest -> Desire -> Action; Lavidge-Steiner Hierarchy: Cognitive (Think) -> Affective (Feel) -> Conative (Do).",
-                "example": "A social video ad grabbing visual attention in 2 seconds (Attention), demonstrating a problem-solving gadget (Interest), highlighting 5-star customer reviews (Desire), and offering a 20% coupon swipe-up link (Action)."
-              },
-              {
-                "id": 34,
-                "name": "Promotional Budgeting Methods",
-                "textbook": "Kotler & Armstrong Ch. 14; Kerin & Hartley Ch. 17",
-                "definition": "Methods used by enterprises to determine overall advertising and promotional financial allocations.",
-                "framework": "Budgeting Methods: Objective-and-Task Method (best practice: define objectives, determine tasks, estimate costs), Percentage-of-Sales Method, Competitive-Parity Method, Affordable Method.",
-                "example": "A consumer packaged goods brand using the Objective-and-Task method to calculate the exact media reach and frequency needed to generate 30% brand awareness in a new market launch."
-              }
-            ]
+            },
+            "gap_status": "Covered",
+            "courses_count": 3
           }
         ]
       },
       {
-        "id": "M4",
-        "name": "Contemporary Horizons & Digital Execution",
-        "description": "Digital inbound customer engagement funnels, social media frameworks (POEM), relationship management touchpoints, global entry modes, and cross-border marketing adaptation.",
-        "color": "#7e22ce",
-        "light_color": "#faf5ff",
-        "border_color": "#a855f7",
-        "categories": [
+        "id": "C4",
+        "number": 4,
+        "name": "Marketing Information Systems & Research Methodology",
+        "scope": "Scientific research designs, primary vs. secondary data collection, and intelligence systems.",
+        "concepts": [
           {
-            "id": "C17",
-            "number": 17,
-            "name": "Digital Marketing, Inbound Strategy & CRM",
-            "scope": "Digital channel taxonomy (POEM), inbound content funnels, and relational touchpoint systems.",
-            "concepts": [
-              {
-                "id": 40,
-                "name": "Digital & Social Media Frameworks",
-                "textbook": "Kotler & Armstrong Ch. 17; Grewal & Levy Ch. 3",
-                "definition": "Modern communications channels categorized by firm control, credibility, and cost structure, alongside social media engagement stages.",
-                "framework": "POEM Taxonomy: Paid Media (sponsored ads, display, PPC), Owned Media (brand website, mobile app, email list), Earned Media (organic shares, viral PR, user reviews); The 4E Framework (Excite, Educate, Experience, Engage).",
-                "example": "Wendy's purchasing sponsored search ads (Paid), publishing content on its corporate Twitter account (Owned), and earning national news coverage when tweets go viral (Earned)."
+            "id": 6,
+            "name": "Marketing Research Process & Design",
+            "textbook": "Kotler & Armstrong Ch. 4; Kerin & Hartley Ch. 8; Grewal & Levy Ch. 10",
+            "definition": "The systematic design, collection, analysis, and reporting of data relevant to a specific marketing situation facing an organization.",
+            "framework": "5-Step Scientific Process: (1) Define Problem & Objectives, (2) Develop Research Plan (Exploratory, Descriptive, Causal), (3) Collect Data, (4) Analyze Data, (5) Take Action.",
+            "example": "LEGO conducting ethnographic and observational research to uncover why young girls were underrepresented among builders, leading to the LEGO Friends line.",
+            "coverage": {
+              "M304": {
+                "level": "O+T",
+                "detail": "Both: Explicitly in Obj 3 ('Apply the concepts of marketing research to evaluate... decisions') + Fossen Sess 5, 17 / Godfrey Sess 16"
               },
-              {
-                "id": 41,
-                "name": "Inbound Marketing & Content Strategy",
-                "textbook": "Grewal & Levy Ch. 3; Kotler & Keller Ch. 20",
-                "definition": "The technique of drawing customers to products and services via content marketing, social media marketing, and search engine optimization rather than interruptive outbound ads.",
-                "framework": "Inbound Flywheel: Attract (educational blog posts, SEO) -> Engage (webinars, email workflows) -> Delight (knowledge base, customer community).",
-                "example": "HubSpot providing free marketing templates and research white papers that rank #1 on Google, converting curious organic visitors into paying software subscribers."
+              "M370": {
+                "level": "Var",
+                "detail": "McManus & Blair Only [T]: Wk 8 Sess 1 dedicated to 'Marketing Research' (McManus Guest Speaker Melinda Spaulding; Blair Lecture). Marek omits Marketing Research session (Ch. 10 unassigned)"
               },
-              {
-                "id": 42,
-                "name": "CRM Strategy & Touchpoint Management",
-                "textbook": "Kotler & Armstrong Ch. 1, 4; Kotler & Keller Ch. 5",
-                "definition": "Managing detailed information about individual customers and carefully managing customer touchpoints to maximize customer retention and loyalty.",
-                "framework": "Customer Journey Touchpoint Mapping: Pre-purchase touchpoints -> Purchase experience -> Post-purchase support; Automated Churn Detection.",
-                "example": "Sephora's Beauty Insider CRM tracking purchase history across app and retail stores to trigger automated personalized product replenishment reminders and custom birthday gifts."
+              "M405": {
+                "level": "O+T",
+                "detail": "Both: Harrison Obj 4 + Stage 3 Research Plan + Behavior Experiment; Khamitov Obj 3 + Sess 2 GenAI in MR + Team Survey"
+              },
+              "M303": {
+                "level": "O+T",
+                "detail": "All 4 (Welden, Liu, Cosguner, Vander Schee): Primary Spine of entire course (Obj 1-5)"
+              },
+              "M346": {
+                "level": "O+T",
+                "detail": "All 3 (Lalwani, Kong, Zhang): Obj 1-4; Lalwani survey design; Kong A/B testing; Zhang causal inference"
+              },
+              "M450": {
+                "level": "O+T",
+                "detail": "Wooldridge: Explicitly in Obj 2 ('Apply the concepts of marketing research...') + Class 18 MHG Quasi-Experiments Case"
               }
-            ]
+            },
+            "gap_status": "Instructor-Dependent",
+            "courses_count": 6
           },
           {
-            "id": "C18",
-            "number": 18,
-            "name": "Global Marketing Strategy & International Market Entry",
-            "scope": "Cross-border expansion entry modes and the standardization versus local adaptation trade-off.",
-            "concepts": [
-              {
-                "id": 43,
-                "name": "Global Market Entry Strategies",
-                "textbook": "Kotler & Armstrong Ch. 19; Kerin & Hartley Ch. 7",
-                "definition": "Strategic modes for entering foreign international markets, ordered along increasing levels of financial commitment, risk, control, and profit potential.",
-                "framework": "Entry Hierarchy: Exporting (Indirect/Direct) -> Licensing / Franchising -> Joint Venture -> Direct Investment (Wholly Owned Subsidiary).",
-                "example": "An American craft brewery beginning by Exporting bottles overseas, advancing to Licensing brewing rights to a local European partner, and ultimately building a wholly owned overseas facility."
+            "id": 7,
+            "name": "Primary vs. Secondary & Qualitative vs. Quantitative",
+            "textbook": "Kotler & Armstrong Ch. 4; Grewal & Levy Ch. 10",
+            "definition": "Primary data is custom-gathered for the specific problem at hand; secondary data already exists from prior collection. Qualitative research explores underlying motives; quantitative seeks numerical measurement.",
+            "framework": "Data & Method Matrix: Secondary vs. Primary Data; Exploratory Qualitative (Focus Groups, In-Depth Interviews) vs. Descriptive Quantitative (Surveys, Scanner) vs. Causal Experimental (A/B Tests).",
+            "example": "Netflix running live A/B field experiments (Causal quantitative primary research) comparing two thumbnail graphics across subscriber cohorts.",
+            "coverage": {
+              "M304": {
+                "level": "O+T",
+                "detail": "Both: Obj 3 & 5 + Course Desc ('requiring both quantitative and qualitative skills')"
               },
-              {
-                "id": 44,
-                "name": "Standardization vs. Adaptation",
-                "textbook": "Kotler & Armstrong Ch. 19; Kerin & Hartley Ch. 7",
-                "definition": "The strategic debate regarding whether to maintain a uniform global marketing mix across borders or adapt offerings to unique cultural, economic, and legal environments.",
-                "framework": "Glocal Strategy ('Think Globally, Act Locally'); Dual Adaptation Matrix (Product Adaptation, Promotion Adaptation, Straight Extension, Invention).",
-                "example": "McDonald's standardizing operational cleanliness and golden arches globally, while adapting menus locally (serving the McSpicy Paneer in India and the Teriyaki McBurger in Japan)."
+              "M370": {
+                "level": "O+T",
+                "detail": "All 3: Explicitly in Obj 3 ('using quantitative and qualitative data')"
+              },
+              "M405": {
+                "level": "O+T",
+                "detail": "Both: Harrison Obj 4 ('evaluate quality and limitations of primary and secondary evidence'); Khamitov qualitative diary + quantitative survey"
+              },
+              "M303": {
+                "level": "O+T",
+                "detail": "All 4: Deep coverage of Secondary Data, Focus Groups/Qualitative Coding, Qualtrics Surveys, and Experimental Design"
+              },
+              "M346": {
+                "level": "O+T",
+                "detail": "Lalwani: Module 2 'Analysis of Survey and Secondary Data' (teams field primary survey); Kong & Zhang: Secondary/Experimental/A-B Testing in R"
+              },
+              "M450": {
+                "level": "O+T",
+                "detail": "Wooldridge: Obj 2 & 4 + Case datasets & MARKSTRAT research studies"
               }
-            ]
+            },
+            "gap_status": "Core Reinforced",
+            "courses_count": 6
+          },
+          {
+            "id": 9,
+            "name": "Marketing Information Systems (MIS)",
+            "textbook": "Kotler & Armstrong Ch. 4; Kerin & Hartley Ch. 8",
+            "definition": "People, equipment, and procedures dedicated to assessing information needs, developing the needed information, and helping decision makers validate actionable customer and market insights.",
+            "framework": "Tripartite MIS Architecture: Internal Databases + Marketing Intelligence Activities + Syndicated/Marketing Research Systems.",
+            "example": "Marriott's guest intelligence system tracking previous stay history, room preferences, and loyalty tier across global properties.",
+            "coverage": {
+              "M304": {
+                "level": "Var",
+                "detail": "Fossen Only [T]: Sess 15 Google Analytics Demo & Sess 17 Nielsen Single-Source Data system; Godfrey omits"
+              },
+              "M370": {
+                "level": "None",
+                "detail": "Omitted (Grewal & Levy Ch. 10 is unassigned)"
+              },
+              "M405": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M303": {
+                "level": "T",
+                "detail": "Cosguner & Vander Schee explicitly teach 'syndicated and secondary data sources of marketing information'; Welden & Liu cover Qualtrics/R pipelines"
+              },
+              "M346": {
+                "level": "T",
+                "detail": "All 3: Working with CRM, scanner, and panel databases in SPSS / R"
+              },
+              "M450": {
+                "level": "T",
+                "detail": "Wooldridge: Custom M450 Data Analysis Tool + MARKSTRAT competitive intelligence dashboard"
+              }
+            },
+            "gap_status": "Covered",
+            "courses_count": 4
+          }
+        ]
+      },
+      {
+        "id": "C5",
+        "number": 5,
+        "name": "Customer Economics & Marketing Performance Analytics",
+        "scope": "Quantitative evaluation of customer acquisition costs, relationship valuation, and return on marketing investment.",
+        "concepts": [
+          {
+            "id": 8,
+            "name": "Customer Lifetime Value (CLV)",
+            "textbook": "Kotler & Armstrong Ch. 1, 20; Palmatier & Sridhar Ch. 3, 7",
+            "definition": "The total net present monetary value of the stream of purchases a customer is expected to generate over a lifetime of patronage with the firm.",
+            "framework": "CLV = [Margin * Retention Rate] / [1 + Discount Rate - Retention Rate] - Acquisition Cost; Customer Equity.",
+            "example": "Starbucks calculating that a loyal daily coffee buyer represents over $14,000 in lifetime value over a decade, justifying loyalty app investments.",
+            "coverage": {
+              "M304": {
+                "level": "O+T",
+                "detail": "Fossen: Obj 5 + explicitly in Sess 5 'Customer analysis III: Measurement tools for customer insights and CLV'; Godfrey: Obj 5 + Sess 12 'Customer relationships & pricing'"
+              },
+              "M370": {
+                "level": "O+T",
+                "detail": "All 3: Obj 4 & 5 + Ch. 1-2 Customer Value & Loyalty economics"
+              },
+              "M405": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M303": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M346": {
+                "level": "Var",
+                "detail": "Zhang [T]: Explicitly teaches 'churn forecasting' in Prediction module; Lalwani & Kong cover binary/multinomial logit response/retention"
+              },
+              "M450": {
+                "level": "O+T",
+                "detail": "Wooldridge: Obj 4 + Lect 3 'Managing Customer Change' (Acquisition, Retention, CLV) & Lect 7 Relationship SCA"
+              }
+            },
+            "gap_status": "Core Reinforced",
+            "courses_count": 4
+          },
+          {
+            "id": 50,
+            "name": "Marketing Metrics & Performance Analytics",
+            "textbook": "Kotler & Keller Ch. 4; Palmatier & Sridhar Ch. 8-9",
+            "definition": "Formal quantitative metrics evaluating the economic effectiveness and efficiency of marketing expenditures.",
+            "framework": "ROMI = (Net Marketing Contribution / Marketing Spend) * 100%; CAC = Acquisition Spend / New Customers; LTV/CAC Ratio; Marketing Mix Modeling (MMM).",
+            "example": "A SaaS firm spending $500,000 on digital acquisition to land 2,500 subscribers, yielding a CAC of $200 against a $750 CLV (3.75:1 LTV/CAC).",
+            "coverage": {
+              "M304": {
+                "level": "O+T",
+                "detail": "Both: Obj 5 ('Calculate marketing metrics, interpret their meaning'); Fossen Sess 15 & 17 Ad Effectiveness; Godfrey Operating Profit Formula (Sess 1 & 24)"
+              },
+              "M370": {
+                "level": "O+T",
+                "detail": "All 3: Obj 4 ('Apply basic marketing analytic techniques to a variety of marketing situations')"
+              },
+              "M405": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M303": {
+                "level": "O+T",
+                "detail": "All 4: Hypothesis testing, correlation, regression, and managerial magnitude interpretation"
+              },
+              "M346": {
+                "level": "O+T",
+                "detail": "All 3: Core Spine \u2014 Demand Forecasting, Marketing Mix Models (MMM), Customer Response Models, and campaign ROI"
+              },
+              "M450": {
+                "level": "O+T",
+                "detail": "Wooldridge: Obj 4 + Lect 8 'Managing Resource Trade-Offs' & Lect 9 'Implementing Marketing Principles and Data Analytics' + MARKSTRAT Share Price Index"
+              }
+            },
+            "gap_status": "Core Reinforced",
+            "courses_count": 5
           }
         ]
       }
-    ];
+    ]
+  },
+  {
+    "id": "M2",
+    "name": "Buyer Behavior & Strategic Formulation (STP)",
+    "description": "Individual consumer cognitive stages, organizational B2B buying centers, market segmentation bases, targeting criteria, and competitive positioning.",
+    "color": "#047857",
+    "light_color": "#ecfdf5",
+    "border_color": "#10b981",
+    "categories": [
+      {
+        "id": "C6",
+        "number": 6,
+        "name": "Consumer Behavior & Decision Psychology",
+        "scope": "Buyer decision stages, internal psychological motivations, and postpurchase cognitive dynamics.",
+        "concepts": [
+          {
+            "id": 10,
+            "name": "Consumer Purchase Decision Process",
+            "textbook": "Kotler & Armstrong Ch. 5; Grewal & Levy Ch. 6; Solomon Ch. 7-8",
+            "definition": "The five-stage cognitive and behavioral process through which consumers move when recognizing a need and selecting an offering.",
+            "framework": "5-Stage Model: Need Recognition -> Information Search -> Evaluation of Alternatives -> Purchase Decision -> Postpurchase Behavior; Customer Decision Journey.",
+            "example": "A college student realizing their laptop is lagging (Need Recognition), reading Reddit reviews (Search), comparing MacBook Air vs. Dell XPS (Evaluation), buying online (Purchase), and assessing battery life (Postpurchase).",
+            "coverage": {
+              "M304": {
+                "level": "O+T",
+                "detail": "Fossen: Sess 3 Customer Motivations & Sess 14 Marketing Funnel; Godfrey: Sess 5 Consumer Psychology & Sess 15 Funnel"
+              },
+              "M370": {
+                "level": "T",
+                "detail": "All 3: Wk 4 Sess 1 & 2 Ch. 6 'Consumer Behavior (Part I & II)'"
+              },
+              "M405": {
+                "level": "O+T",
+                "detail": "Both: Harrison Obj 2 & 5 + Quiz 3 'Decision Processes and the Buying Journey' + Lab 4; Khamitov Obj 1-2 + Solomon Ch. 7 'Decision Making I & II' & Ch. 8 'Buying, Using, and Disposing'"
+              },
+              "M303": {
+                "level": "Var",
+                "detail": "Welden Only [T]: Sept 8 'Customer Journey Analysis' & Sept 10 Case #1 'Using Qualitative Data to Guide Customer Journey Development'"
+              },
+              "M346": {
+                "level": "T",
+                "detail": "All 3: Quantitative 'Customer Choice and Response Models' (Binary & Multinomial Logit)"
+              },
+              "M450": {
+                "level": "None",
+                "detail": "Not covered as standalone lecture"
+              }
+            },
+            "gap_status": "Core Reinforced",
+            "courses_count": 5
+          },
+          {
+            "id": 11,
+            "name": "Cognitive Dissonance",
+            "textbook": "Kotler & Armstrong Ch. 5; Grewal & Levy Ch. 6; Solomon Ch. 6-8",
+            "definition": "Buyer discomfort caused by postpurchase conflict; psychological tension when questioning whether one made the optimal brand decision.",
+            "framework": "Expectancy-Disconfirmation Model; Postpurchase Reassurance Strategies; Heuristics & Biases.",
+            "example": "Car dealerships sending congratulatory letters, highlighting safety awards, and providing free initial maintenance visits immediately following vehicle delivery.",
+            "coverage": {
+              "M304": {
+                "level": "T",
+                "detail": "Godfrey: Sess 5 Consumer Psychology; Fossen: Sess 3 Customer Motivations"
+              },
+              "M370": {
+                "level": "T",
+                "detail": "All 3: Wk 4 Ch. 6 Consumer Behavior (postpurchase dissonance)"
+              },
+              "M405": {
+                "level": "O+T",
+                "detail": "Both: Harrison Obj 1-2 + Mirror Self-Study; Khamitov Obj 2 + Ch. 6 Attitudes, Ch. 7-8 Postpurchase & Brand Experience Diary"
+              },
+              "M303": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M346": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M450": {
+                "level": "None",
+                "detail": "Not covered"
+              }
+            },
+            "gap_status": "Covered",
+            "courses_count": 3
+          },
+          {
+            "id": 12,
+            "name": "Psychological & Social Influences",
+            "textbook": "Kotler & Armstrong Ch. 5; Grewal & Levy Ch. 6; Solomon Ch. 3-6, 9-14",
+            "definition": "Internal psychological forces (motivation, perception, learning, memory, attitudes, self-concept) and external socio-cultural forces (reference groups, social class, subculture, culture) shaping purchase choices.",
+            "framework": "Maslow's Hierarchy of Needs; Selective Perception; Attitude Models; Reference Group Typologies (Aspirational, Associative, Dissociative).",
+            "example": "Rolex marketing to esteem and status needs, while Nike enlists elite athletes as aspirational reference figures for everyday runners.",
+            "coverage": {
+              "M304": {
+                "level": "T",
+                "detail": "Both: Course Desc ('draws on economics, psychology, and sociology') + Fossen Sess 3 / Godfrey Sess 5 'Consumer Psychology'"
+              },
+              "M370": {
+                "level": "T",
+                "detail": "All 3: Wk 4 Sess 1 & 2 Ch. 6 'Consumer Behavior (Part I & II)'"
+              },
+              "M405": {
+                "level": "O+T",
+                "detail": "Core Spine of M405: Harrison Obj 1 + Quizzes 1, 2, 4 + Labs 2, 3, 5; Khamitov Obj 1-2 + 16 lectures across Solomon Ch. 3-6 & Ch. 9-14"
+              },
+              "M303": {
+                "level": "Var",
+                "detail": "Welden Only [T]: Sept 22 'Cognitive and Affective Basics for Marketing Research' & Sept 24 Case #2 'Applying Psych Constructs to Survey Design'"
+              },
+              "M346": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M450": {
+                "level": "None",
+                "detail": "Not covered"
+              }
+            },
+            "gap_status": "Core Reinforced",
+            "courses_count": 4
+          }
+        ]
+      },
+      {
+        "id": "C7",
+        "number": 7,
+        "name": "B2B Organizational Buying & Procurement",
+        "scope": "Formal multi-stakeholder organizational buying centers and institutional purchase situations.",
+        "concepts": [
+          {
+            "id": 13,
+            "name": "B2B Buying Center Dynamics",
+            "textbook": "Kotler & Armstrong Ch. 6; Grewal & Levy Ch. 7",
+            "definition": "The decision-making unit of a buying organization consisting of all individuals and units who participate in the business purchase decision.",
+            "framework": "5 Core Buying Roles: Initiators, Users, Influencers, Gatekeepers, Deciders, Buyers.",
+            "example": "A hospital acquiring an MRI scanner where radiologists act as Influencers, the CFO serves as Decider, procurement agents act as Buyers, and department assistants serve as Gatekeepers.",
+            "coverage": {
+              "M304": {
+                "level": "None",
+                "detail": "Omitted (focuses on startup business plans)"
+              },
+              "M370": {
+                "level": "T",
+                "detail": "All 3: Applied in the required 'Precision Polymers, Inc.' B2B case study (Wk 5, 6, 10/11), though Grewal & Levy Ch. 7 (B2B Marketing) is skipped as a SmartBook reading"
+              },
+              "M405": {
+                "level": "Var",
+                "detail": "Harrison Only [O+T]: Explicitly in Obj 3 ('Compare individual consumer decisions with organizational buying processes, roles, risks, and criteria'), Obj 5, Quiz 4, and Lab 6 'Organizational Buyer Case (B2B Case Lab)'. Khamitov omits B2B completely"
+              },
+              "M303": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M346": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M450": {
+                "level": "T",
+                "detail": "Wooldridge: Covered via B2B cases (Exteriors Inc, AIRCO, Apex Industrial Solution) & Lect 7 Relationship SCA"
+              }
+            },
+            "gap_status": "Instructor-Dependent",
+            "courses_count": 3
+          },
+          {
+            "id": 14,
+            "name": "B2B Buy Classes / Buying Situations",
+            "textbook": "Kotler & Armstrong Ch. 6; Grewal & Levy Ch. 7",
+            "definition": "The three standard organizational purchase situations defined by problem novelty, information requirements, and risk level.",
+            "framework": "Buying Classes: Straight Rebuy (routine reorder), Modified Rebuy (changing specs, terms, suppliers), New Task (first-time purchase with exhaustive evaluation).",
+            "example": "An office reordering printer paper automatically (Straight Rebuy) versus evaluating enterprise cloud software vendors for the first time (New Task).",
+            "coverage": {
+              "M304": {
+                "level": "None",
+                "detail": "Omitted"
+              },
+              "M370": {
+                "level": "T",
+                "detail": "All 3: Applied in Precision Polymers, Inc. B2B case discussion (Ch. 7 textbook chapter skipped)"
+              },
+              "M405": {
+                "level": "Var",
+                "detail": "Harrison Only [O+T]: Obj 3 ('organizational buying processes, roles, risks, and criteria') + Quiz 4 + Lab 6 B2B Case Lab; Khamitov omits B2B"
+              },
+              "M303": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M346": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M450": {
+                "level": "T",
+                "detail": "Wooldridge: Applied in B2B cases (AIRCO, Apex Industrial Solution)"
+              }
+            },
+            "gap_status": "Instructor-Dependent",
+            "courses_count": 3
+          }
+        ]
+      },
+      {
+        "id": "C8",
+        "number": 8,
+        "name": "Market Segmentation & Target Market Strategy",
+        "scope": "Dividing heterogeneous consumer markets and selecting optimal segment coverage strategies.",
+        "concepts": [
+          {
+            "id": 15,
+            "name": "Market Segmentation Bases",
+            "textbook": "Kotler & Armstrong Ch. 7; Grewal & Levy Ch. 9; Palmatier & Sridhar Ch. 2",
+            "definition": "Dividing a broad, heterogeneous market into distinct subsets of buyers with common needs, characteristics, or behaviors.",
+            "framework": "4 Core Segmentation Bases: Geographic, Demographic, Psychographic, Behavioral; Effective Segmentation Criteria (MASDA).",
+            "example": "Planet Fitness segmenting psychographically based on attitude toward gyms ('Judgement Free Zone' for casual exercisers intimidated by hardcore gym culture).",
+            "coverage": {
+              "M304": {
+                "level": "O+T",
+                "detail": "Fossen: Obj 2 + Sess 3 'Understanding customer segmentation, motivations, and unmet needs'; Godfrey: Obj 2 + Sess 4 'Segmentation, Targeting, Positioning'"
+              },
+              "M370": {
+                "level": "O+T",
+                "detail": "All 3: Explicitly in Obj 2 & 3 + Wk 5 Ch. 9 (2 sessions) + Mini-Case 1 on STP"
+              },
+              "M405": {
+                "level": "O+T",
+                "detail": "Harrison: Obj 5 ('Develop useful consumer and organizational-buyer profiles, journeys, and market segments') + Quiz 4; Khamitov [T]: Ch. 10 Lifestyles/Psychographics & Ch. 11-13"
+              },
+              "M303": {
+                "level": "T",
+                "detail": "All 4: Survey demographic/psychographic segmentation analysis"
+              },
+              "M346": {
+                "level": "Var",
+                "detail": "Kong [T]: Dedicated session Class 23 'Segmentation & Pricing' & Course Desc; Lalwani & Zhang cover group differences"
+              },
+              "M450": {
+                "level": "O+T",
+                "detail": "Wooldridge: Lect 2 'Managing Customer Heterogeneity (MP1)' (Ch. 2) + M450 Data App + Dent Max & Sony Cases + MARKSTRAT segments"
+              }
+            },
+            "gap_status": "Core Reinforced",
+            "courses_count": 6
+          },
+          {
+            "id": 16,
+            "name": "Target Market Selection Strategies",
+            "textbook": "Kotler & Armstrong Ch. 7; Grewal & Levy Ch. 9; Palmatier & Sridhar Ch. 2",
+            "definition": "Evaluating each market segment's attractiveness and selecting one or more target segments to enter based on strategic fit.",
+            "framework": "Coverage Spectrum: Undifferentiated / Mass -> Differentiated / Segmented -> Concentrated / Niche -> Micromarketing (One-to-One).",
+            "example": "Rolls-Royce utilizing Concentrated Niche marketing for ultra-wealthy buyers, while Procter & Gamble deploys Differentiated marketing via Tide, Gain, and Cheer.",
+            "coverage": {
+              "M304": {
+                "level": "O+T",
+                "detail": "Fossen: Obj 2 + Sess 3-4 & Sess 15 Digital Targeting; Godfrey: Obj 2 + Sess 3 'Conquering the Mass Market' & Sess 4 'STP'"
+              },
+              "M370": {
+                "level": "O+T",
+                "detail": "All 3: Explicitly in Obj 2 & 3 ('Identify the target customers or target segments that provide the best potential...') + Wk 5 Ch. 9 + STP Mini-Case"
+              },
+              "M405": {
+                "level": "O+T",
+                "detail": "Harrison: Obj 5 + Quiz 4; Khamitov [T]: Target segment selection for behavioral nudge campaign"
+              },
+              "M303": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M346": {
+                "level": "Var",
+                "detail": "Kong [T]: Class 23 'Segmentation & Pricing'; Zhang [T]: Course Desc explicitly highlights targeting"
+              },
+              "M450": {
+                "level": "O+T",
+                "detail": "Wooldridge: Lect 2 'Managing Customer Heterogeneity (MP1)' + MARKSTRAT multi-segment targeting"
+              }
+            },
+            "gap_status": "Core Reinforced",
+            "courses_count": 5
+          }
+        ]
+      },
+      {
+        "id": "C9",
+        "number": 9,
+        "name": "Differentiation, Value Proposition & Positioning",
+        "scope": "Establishing competitive points of difference, perceptual mapping, and formal brand positioning statements.",
+        "concepts": [
+          {
+            "id": 17,
+            "name": "Value Proposition & Perceptual Mapping",
+            "textbook": "Kotler & Armstrong Ch. 7; Grewal & Levy Ch. 9; Palmatier & Sridhar Ch. 2",
+            "definition": "The full positioning of a brand\u2014the full mix of benefits on which it is differentiated; visualized spatially through perceptual mapping along key consumer evaluative criteria.",
+            "framework": "2D Perceptual / Brand Positioning Map (Attribute X vs. Attribute Y); Value Proposition Matrix.",
+            "example": "Automotive perceptual map plotting luxury vs. economy and sporty vs. conservative, revealing white-space positioning opportunities.",
+            "coverage": {
+              "M304": {
+                "level": "O+T",
+                "detail": "Fossen: Sess 4 'Customer analysis II: Crafting a compelling value proposition' & Sess 6-7; Godfrey: Sess 4 STP & Sess 6-7"
+              },
+              "M370": {
+                "level": "O+T",
+                "detail": "All 3: Obj 2 & 5 + Wk 5 Ch. 9 Perceptual Mapping + STP Mini-Case"
+              },
+              "M405": {
+                "level": "T",
+                "detail": "Harrison: Course Desc ('how marketers create value') + Lab 5; Khamitov: Consumers & Brands I-III"
+              },
+              "M303": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M346": {
+                "level": "Var",
+                "detail": "Kong & Zhang [T]: Conjoint Analysis for product positioning & market simulation"
+              },
+              "M450": {
+                "level": "O+T",
+                "detail": "Wooldridge: Lect 2 MP1 + M450 Data App perceptual maps + MARKSTRAT Perceptual Map tool across 7 rounds"
+              }
+            },
+            "gap_status": "Core Reinforced",
+            "courses_count": 5
+          },
+          {
+            "id": 18,
+            "name": "Positioning Statement Formulation",
+            "textbook": "Kotler & Armstrong Ch. 7; Grewal & Levy Ch. 9, 11",
+            "definition": "A succinct internal articulation summarizing brand position relative to alternatives, highlighting target audience, frame of reference, and primary point of difference.",
+            "framework": "Formula: 'To [Target Segment and Need], our [Brand] is the [Concept/Category] that [Point of Difference] because [Reason to Believe]'. POP vs. POD.",
+            "example": "'For athletes seeking maximum stamina, Gatorade is the sports beverage that rehydrates faster than water because of its scientifically proven electrolyte-carbohydrate formula.'",
+            "coverage": {
+              "M304": {
+                "level": "O+T",
+                "detail": "Fossen: Sess 4 Crafting Value Proposition; Godfrey: Sess 4 STP"
+              },
+              "M370": {
+                "level": "O+T",
+                "detail": "All 3: Obj 2 + Wk 5 Ch. 9 Positioning & Wk 8 Ch. 11 'Products and Brand Position'"
+              },
+              "M405": {
+                "level": "Var",
+                "detail": "Harrison [T]: Consulting Report positioning recommendations"
+              },
+              "M303": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M346": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M450": {
+                "level": "O+T",
+                "detail": "Wooldridge: Lect 2 MP1 & Lect 5 Brand-Based SCA + EnergAid & Brand Identity Case"
+              }
+            },
+            "gap_status": "Core Reinforced",
+            "courses_count": 4
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "M3",
+    "name": "The Tactical Marketing Mix (4 Ps)",
+    "description": "The operational marketing engine: Product levels, lifecycle, and brand equity; Services marketing; Pricing economics and tactics; Distribution channels and omnichannel logistics; and Integrated Marketing Communications.",
+    "color": "#b45309",
+    "light_color": "#fffbeb",
+    "border_color": "#f59e0b",
+    "categories": [
+      {
+        "id": "C10",
+        "number": 10,
+        "name": "Product Architecture & Brand Management",
+        "scope": "Concentric product value layers, mix/line dimensions, and brand equity deployment strategies.",
+        "concepts": [
+          {
+            "id": 19,
+            "name": "The Three Levels of Product",
+            "textbook": "Kotler & Armstrong Ch. 8; Grewal & Levy Ch. 11",
+            "definition": "The conceptual model viewing a product as a concentric bundle of value delivered across three layers.",
+            "framework": "Concentric Levels: (1) Core Customer Value, (2) Actual Product (brand, features, design, packaging), (3) Augmented / Associated Product (warranty, support, financing).",
+            "example": "A smartphone buyer purchases connectivity (Core Value), the iPhone hardware and iOS software (Actual Product), and AppleCare warranty and iCloud backup (Augmented Product).",
+            "coverage": {
+              "M304": {
+                "level": "O+T",
+                "detail": "Both: Obj 1 + Sess 2 Product Development & Innovation"
+              },
+              "M370": {
+                "level": "O+T",
+                "detail": "All 3: Obj 5 & 7 + Wk 8 Ch. 11 'Product, Branding and Packaging Decisions' (Core, Actual, Associated product)"
+              },
+              "M405": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M303": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M346": {
+                "level": "Var",
+                "detail": "Kong & Zhang [T]: Conjoint Analysis decomposing products into multi-attribute feature levels"
+              },
+              "M450": {
+                "level": "T",
+                "detail": "Wooldridge: Lect 6 'Managing Offering-Based SCA' + MARKSTRAT R&D physical product attributes"
+              }
+            },
+            "gap_status": "Covered",
+            "courses_count": 4
+          },
+          {
+            "id": 20,
+            "name": "Product Line & Mix Portfolio Decisions",
+            "textbook": "Kotler & Armstrong Ch. 8; Grewal & Levy Ch. 11",
+            "definition": "Managing the set of all product lines and items that a seller offers: product mix width/breadth, length, depth, and consistency.",
+            "framework": "Product Mix Dimensions: Width/Breadth (# of lines), Length (total items), Depth (# of variants per item), Consistency; Line Stretching & Filling.",
+            "example": "Colgate managing mix Breadth across oral care, personal care, and pet nutrition, with deep Depth in oral care (Total, Optic White, Sensitive).",
+            "coverage": {
+              "M304": {
+                "level": "O+T",
+                "detail": "Both: Obj 1 + Product & Competitive Strategy modules"
+              },
+              "M370": {
+                "level": "O+T",
+                "detail": "All 3: Explicitly in Obj 5 ('developing and managing products and the product portfolio') & Obj 7 + Wk 8 Ch. 11"
+              },
+              "M405": {
+                "level": "Var",
+                "detail": "Khamitov Only [T]: Additional Reading 2 ('The Surprising Upside of Expensive Products that Don't Sell' \u2014 product line decoy effects)"
+              },
+              "M303": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M346": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M450": {
+                "level": "O+T",
+                "detail": "Wooldridge: Lect 6 Offering-Based SCA + MARKSTRAT multi-brand product portfolio management"
+              }
+            },
+            "gap_status": "Covered",
+            "courses_count": 4
+          },
+          {
+            "id": 23,
+            "name": "Brand Equity & Brand Architecture",
+            "textbook": "Kotler & Armstrong Ch. 8; Grewal & Levy Ch. 11; Palmatier & Sridhar Ch. 5",
+            "definition": "The differential effect that knowing the brand name has on customer response to the product; brand architecture governs how corporate and product brands are structured.",
+            "framework": "Brand Equity Drivers (Awareness, Associations, Perceived Quality, Loyalty); Line Extension, Brand Extension, Cobranding, Multibrands.",
+            "example": "Coca-Cola launching Diet Coke (Line Extension); Caterpillar expanding into work boots (Brand Extension); P&G operating Tide and Gain (Multibrands).",
+            "coverage": {
+              "M304": {
+                "level": "O+T",
+                "detail": "Both: Obj 1 + Product/Brand & Competitor SCA modules (Godfrey Sess 6 BOR Stack)"
+              },
+              "M370": {
+                "level": "O+T",
+                "detail": "All 3: Explicitly in Obj 7 ('product, branding, distribution and promotional strategies') + Wk 8 Ch. 11"
+              },
+              "M405": {
+                "level": "Var",
+                "detail": "Khamitov (Deep [T]): Dedicates 3 full sessions (Sept 29, Oct 1, Oct 6) to 'Consumers and Brands I, II, III' + JCR Consumer Trust Meta-Analysis + 15% Brand Experience Diary; Harrison covers brand identity briefly in Lab 5 / Quiz 4"
+              },
+              "M303": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M346": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M450": {
+                "level": "O+T",
+                "detail": "Wooldridge: Dedicated Lect 5 'Managing Brand-Based SCA' (Ch. 5) + Class 13 Case 'EnergAid and Brand Identity'"
+              }
+            },
+            "gap_status": "Core Reinforced",
+            "courses_count": 4
+          }
+        ]
+      },
+      {
+        "id": "C11",
+        "number": 11,
+        "name": "Innovation, New Product Development & Life Cycle",
+        "scope": "Stage-gate commercialization funnels, technology diffusion curves, and stage-by-stage PLC strategies.",
+        "concepts": [
+          {
+            "id": 21,
+            "name": "Product Life Cycle (PLC)",
+            "textbook": "Kotler & Armstrong Ch. 9; Grewal & Levy Ch. 12; Palmatier & Sridhar Ch. 3",
+            "definition": "The course of a product's sales and profits over its lifetime across four distinct commercial stages.",
+            "framework": "4 PLC Stages: Introduction -> Growth -> Maturity -> Decline.",
+            "example": "Physical DVD media is in Decline; standard smartphones are in late Maturity; Electric Vehicles are in rapid Growth; commercial quantum computing is in Introduction.",
+            "coverage": {
+              "M304": {
+                "level": "T",
+                "detail": "Fossen: Sess 2 & 8 Market Entry; Godfrey: Sess 2 Innovation"
+              },
+              "M370": {
+                "level": "O+T",
+                "detail": "All 3: Obj 7 + Wk 8/9 Ch. 12 'Developing New Products' (PLC stages)"
+              },
+              "M405": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M303": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M346": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M450": {
+                "level": "O+T",
+                "detail": "Wooldridge: Lect 3 'Managing Customer Change' (Ch. 3 Lifecycle) & Lect 6 + MARKSTRAT Sonite (mature) vs. Vodite (intro/growth)"
+              }
+            },
+            "gap_status": "Covered",
+            "courses_count": 3
+          },
+          {
+            "id": 22,
+            "name": "New Product Development (NPD) & Diffusion",
+            "textbook": "Kotler & Armstrong Ch. 9; Grewal & Levy Ch. 12; Palmatier & Sridhar Ch. 6",
+            "definition": "The systematic stage-gate funnel for developing new offerings, and the sociological diffusion curve tracking innovation adoption across consumer cohorts.",
+            "framework": "NPD Funnel (Idea Generation -> Concept Testing -> Product Development -> Market Testing -> Launch); Rogers' Diffusion of Innovation Curve (Innovators, Early Adopters, Early Majority, Late Majority, Laggards).",
+            "example": "Tech enthusiasts camping outside stores for the first 2007 iPhone (Innovators/Early Adopters) versus mainstream buyers upgrading only after 4G networks became ubiquitous (Late Majority).",
+            "coverage": {
+              "M304": {
+                "level": "O+T",
+                "detail": "Fossen: Sess 2 'Creative thinking for product development: Generating innovative ideas'; Godfrey: Course Desc ('use data to identify areas for innovation') + Sess 2 'Innovation' + MCA consulting project"
+              },
+              "M370": {
+                "level": "O+T",
+                "detail": "All 3: Obj 5 & 7 + Wk 8/9 Ch. 12 'Developing New Products' (1-2 sessions) + Mini-Case 2 on New Products"
+              },
+              "M405": {
+                "level": "Var",
+                "detail": "Khamitov [T]: Solomon Ch. 14 Diffusion of Innovations"
+              },
+              "M303": {
+                "level": "T",
+                "detail": "All 4: New product concept testing via focus groups and surveys"
+              },
+              "M346": {
+                "level": "Var",
+                "detail": "Kong & Zhang [T]: Conjoint Analysis for new product design (Kong Class 24; Zhang Prescription module)"
+              },
+              "M450": {
+                "level": "O+T",
+                "detail": "Wooldridge: Lect 6 'Managing Offering-Based SCA' (Ch. 6 Innovation) + Sony & Roam Base Pivot Cases + MARKSTRAT R&D projects"
+              }
+            },
+            "gap_status": "Core Reinforced",
+            "courses_count": 6
+          }
+        ]
+      },
+      {
+        "id": "C12",
+        "number": 12,
+        "name": "Services Marketing & Service Quality Delivery",
+        "scope": "Unique service challenges (the 4 Is / IHIP), expanded 7 Ps marketing mix, and service gap minimization.",
+        "concepts": [
+          {
+            "id": 24,
+            "name": "Services Marketing & The 7 Ps",
+            "textbook": "Kotler & Armstrong Ch. 8; Kerin & Hartley Ch. 12; Grewal & Levy Ch. 13",
+            "definition": "The unique marketing principles required for intangible economic activities, characterized by the 4 Is and managed through the extended 7 Ps mix.",
+            "framework": "The 4 Is (IHIP): Intangibility, Inseparability, Inconsistency/Variability, Inventory/Perishability. Extended 7 Ps: 4 Ps + People, Process, Physical Evidence.",
+            "example": "Airlines cannot inventory unsold seats once a flight departs (Perishability); passenger satisfaction depends on flight attendant interactions (Inconsistency/People).",
+            "coverage": {
+              "M304": {
+                "level": "T",
+                "detail": "Minimal: Mentioned in passing in Sess 2 ('new products, services, or business ventures'), no dedicated Services Marketing lecture"
+              },
+              "M370": {
+                "level": "None",
+                "detail": "CURRICULUM GAP: Grewal & Levy Ch. 13 ('Services: The Intangible Product') is SKIPPED across Marek, McManus, and Blair"
+              },
+              "M405": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M303": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M346": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M450": {
+                "level": "T",
+                "detail": "Minimal: Touched on within Lect 6 (Offering-Based SCA) & Lect 7 (Relationship-Based SCA), no dedicated 4 Is / 7 Ps lecture"
+              }
+            },
+            "gap_status": "True Curriculum Gap",
+            "courses_count": 0
+          },
+          {
+            "id": 49,
+            "name": "The Service Gap Model",
+            "textbook": "Grewal & Levy Ch. 13; Kotler & Keller Ch. 14",
+            "definition": "A systematic diagnostic framework identifying five critical discrepancies that cause service delivery failures between customer expectations and actual service delivery.",
+            "framework": "Parasuraman, Zeithaml & Berry Gap Model: Gap 1 (Knowledge), Gap 2 (Standards), Gap 3 (Delivery), Gap 4 (Communication), Gap 5 (Service Quality); SERVQUAL (RATER).",
+            "example": "A hotel advertising 5-minute express check-in (Communication Gap) that takes 30 minutes due to understaffed front desks (Delivery Gap).",
+            "coverage": {
+              "M304": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M370": {
+                "level": "None",
+                "detail": "CURRICULUM GAP: Grewal & Levy Ch. 13 (which teaches the Service Gap Model) is SKIPPED across all sections"
+              },
+              "M405": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M303": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M346": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M450": {
+                "level": "None",
+                "detail": "Not covered"
+              }
+            },
+            "gap_status": "True Curriculum Gap",
+            "courses_count": 0
+          }
+        ]
+      },
+      {
+        "id": "C13",
+        "number": 13,
+        "name": "Pricing Fundamentals, Economics & Tactical Strategies",
+        "scope": "Cost/value pricing foundations, demand elasticity, break-even mechanics, and tactical new-product/portfolio price setting.",
+        "concepts": [
+          {
+            "id": 25,
+            "name": "Major Pricing Orientations",
+            "textbook": "Kotler & Armstrong Ch. 10; Grewal & Levy Ch. 14",
+            "definition": "The three fundamental orientations used to determine base price: customer value-based pricing, cost-based pricing, and competition-based pricing.",
+            "framework": "The 5 Cs of Pricing (Company Objectives, Customers, Costs, Competition, Channel Members); Value-Based vs. Cost-Plus vs. Competitor Parity.",
+            "example": "Enterprise software pricing seats at $150/month based on productivity value generated for clients (Value-Based) rather than server hosting cost.",
+            "coverage": {
+              "M304": {
+                "level": "O+T",
+                "detail": "Fossen: Sess 10 'Introduction to competitive pricing and pricing dynamics'; Godfrey: Sess 10 'Value-add pricing' & Sess 11 'The competitive landscape'"
+              },
+              "M370": {
+                "level": "O+T",
+                "detail": "All 3: Explicitly in Obj 6 + Wk 9/10 Ch. 14 'Pricing Concepts for Capturing Value / Pricing for Profit' (2 sessions) + Mini-Case 3 on Pricing"
+              },
+              "M405": {
+                "level": "Var",
+                "detail": "Khamitov [T]: Behavioral pricing psychology in Additional Reading 2"
+              },
+              "M303": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M346": {
+                "level": "Var",
+                "detail": "Kong Explicit [T]: Dedicates 2 full sessions (Class 16 & 17) to 'Pricing Strategy' + Class 23 'Segmentation & Pricing'"
+              },
+              "M450": {
+                "level": "T",
+                "detail": "Wooldridge: Applied across 7 rounds of MARKSTRAT pricing decisions"
+              }
+            },
+            "gap_status": "Core Reinforced",
+            "courses_count": 5
+          },
+          {
+            "id": 26,
+            "name": "Price Elasticity of Demand",
+            "textbook": "Kotler & Armstrong Ch. 10; Grewal & Levy Ch. 14",
+            "definition": "A quantitative measure of consumer demand responsiveness to a percentage change in price.",
+            "framework": "Elasticity Formula: Ed = (% Change in Quantity Demanded) / (% Change in Price). Elastic (|Ed| > 1) vs. Inelastic (|Ed| < 1).",
+            "example": "Prescription insulin is highly Inelastic (|Ed| < 1) because patients have no substitute, whereas leisure vacation bookings are highly Elastic (|Ed| > 1).",
+            "coverage": {
+              "M304": {
+                "level": "O+T",
+                "detail": "Fossen: Obj 5 + Sess 11 'Pricing II: Strategies, elasticity, and profitability' & Sess 12 'Forecasting demand'; Godfrey: Obj 5 + Sess 10-12"
+              },
+              "M370": {
+                "level": "O+T",
+                "detail": "All 3: Explicitly in Obj 6 ('price sensitivity of customers') + Ch. 14 + Pricing Mini-Case"
+              },
+              "M405": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M303": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M346": {
+                "level": "O+T",
+                "detail": "All 3: Demand Forecasting & Demand Modeling modules (Lalwani Mod 3; Kong Classes 13-17; Zhang Prediction/Prescription)"
+              },
+              "M450": {
+                "level": "T",
+                "detail": "Wooldridge: MARKSTRAT price elasticity estimation across segments"
+              }
+            },
+            "gap_status": "Core Reinforced",
+            "courses_count": 4
+          },
+          {
+            "id": 27,
+            "name": "Break-Even Analysis & Margin Mechanics",
+            "textbook": "Kotler & Armstrong Ch. 10; Grewal & Levy Ch. 14",
+            "definition": "Determining the sales volume at which total revenue equals total cost, generating zero profit, and analyzing unit contribution margin.",
+            "framework": "Break-Even Quantity: BEQ = Fixed Costs / (Unit Price - Unit Variable Cost); Operating Profit Formula.",
+            "example": "A theater with $120,000 fixed production costs, charging $60 per ticket with $20 variable costs ($40 contribution margin), must sell 3,000 tickets to break even.",
+            "coverage": {
+              "M304": {
+                "level": "O+T",
+                "detail": "Fossen: Obj 5 + Sess 11 Profitability & Homework #2; Godfrey: Obj 5 + Course Desc & Sess 24 'the operating profit formula'"
+              },
+              "M370": {
+                "level": "O+T",
+                "detail": "All 3: Obj 4 & 6 ('given cost information') + Ch. 14 Break-Even Analysis + Precision Polymers B2B margin quizzes + Pricing Mini-Case"
+              },
+              "M405": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M303": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M346": {
+                "level": "Var",
+                "detail": "Kong [T]: Classes 16-17 Pricing Strategy optimization"
+              },
+              "M450": {
+                "level": "O+T",
+                "detail": "Wooldridge: Obj 4 + MARKSTRAT unit cost, transfer cost, and net marketing contribution mechanics"
+              }
+            },
+            "gap_status": "Core Reinforced",
+            "courses_count": 4
+          },
+          {
+            "id": 28,
+            "name": "New Product Pricing Strategies",
+            "textbook": "Kotler & Armstrong Ch. 11; Grewal & Levy Ch. 14",
+            "definition": "Pricing strategies used during initial market introduction: market-skimming versus market-penetration pricing.",
+            "framework": "Market-Skimming (high initial price skimming top demand layer) vs. Market-Penetration (low initial price rapidly acquiring mass share & experience curve).",
+            "example": "Sony launching PlayStation 3 at $599 to skim enthusiasts (Skimming); Disney+ launching at $6.99/mo to rapidly acquire 100M+ subscribers (Penetration).",
+            "coverage": {
+              "M304": {
+                "level": "O+T",
+                "detail": "Fossen & Godfrey: Sess 10-12 Pricing Strategies"
+              },
+              "M370": {
+                "level": "O+T",
+                "detail": "All 3: Explicitly in Obj 6 ('Understand the pricing of a new product...') + Ch. 14 + Pricing Mini-Case"
+              },
+              "M405": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M303": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M346": {
+                "level": "Var",
+                "detail": "Kong [T]: Classes 16-17 Pricing Strategy"
+              },
+              "M450": {
+                "level": "T",
+                "detail": "Wooldridge: MARKSTRAT Vodite new-market skimming vs. penetration pricing"
+              }
+            },
+            "gap_status": "Covered",
+            "courses_count": 4
+          },
+          {
+            "id": 29,
+            "name": "Product Mix & Tactical Pricing",
+            "textbook": "Kotler & Armstrong Ch. 11; Grewal & Levy Ch. 14",
+            "definition": "Setting prices for a portfolio of related products to maximize total mix profit, and adapting prices via dynamic/segmented price discrimination.",
+            "framework": "Captive-Product Pricing, Product Line Pricing, Bundle Pricing, Dynamic/Surge Pricing, 1st/2nd/3rd Degree Price Discrimination.",
+            "example": "HP selling printers near break-even and pricing ink cartridges at high margins (Captive-Product); Uber adjusting rates via real-time surge pricing.",
+            "coverage": {
+              "M304": {
+                "level": "O+T",
+                "detail": "Fossen: Sess 10-12; Godfrey: Adds a 4th Pricing session (Sess 14 'Pricing IV: Recent trends and ethical concerns' covering dynamic/surge pricing)"
+              },
+              "M370": {
+                "level": "O+T",
+                "detail": "All 3: Obj 6 & 7 + Ch. 14 Pricing Tactics (bundling, captive pricing, price lining)"
+              },
+              "M405": {
+                "level": "Var",
+                "detail": "Khamitov [T]: Decoy/line pricing in Additional Reading 2"
+              },
+              "M303": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M346": {
+                "level": "Var",
+                "detail": "Kong Explicit [T]: Class 23 'Segmentation & Pricing' (segmented price discrimination)"
+              },
+              "M450": {
+                "level": "T",
+                "detail": "Wooldridge: MARKSTRAT multi-brand price lining"
+              }
+            },
+            "gap_status": "Core Reinforced",
+            "courses_count": 5
+          }
+        ]
+      },
+      {
+        "id": "C14",
+        "number": 14,
+        "name": "Marketing Channels & Distribution Governance",
+        "scope": "Channel levels, distribution intensity, and vertical marketing systems overcoming channel conflict.",
+        "concepts": [
+          {
+            "id": 35,
+            "name": "Marketing Channels & Structure",
+            "textbook": "Kotler & Armstrong Ch. 12; Grewal & Levy Ch. 15",
+            "definition": "A set of interdependent organizations that make a product or service available for use or consumption; direct vs. indirect intermediary tiers.",
+            "framework": "Direct Channel (Producer -> Consumer) vs. Indirect Channel (Producer -> Wholesaler -> Retailer -> Consumer); Disintermediation.",
+            "example": "Tesla utilizing Direct-to-Consumer showrooms, while Coca-Cola distributes through multi-layered indirect bottler and retailer networks.",
+            "coverage": {
+              "M304": {
+                "level": "O+T",
+                "detail": "Fossen: Explicitly in Sess 19 'Distribution I: Choosing direct vs. indirect channels' & Sess 21 HBR Amazon Case; Godfrey: Sess 19 & 21"
+              },
+              "M370": {
+                "level": "O+T",
+                "detail": "All 3: Explicitly in Obj 7 ('distribution... strategies and tactics') + Wk 11/12 Ch. 15 'Supply Chain and Channel Management' + Precision Polymers Case"
+              },
+              "M405": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M303": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M346": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M450": {
+                "level": "T",
+                "detail": "Wooldridge: Lect 7 Relationship SCA + MARKSTRAT 3 distribution channels (Specialty, Mass, Online)"
+              }
+            },
+            "gap_status": "Covered",
+            "courses_count": 3
+          },
+          {
+            "id": 36,
+            "name": "Distribution Intensity Strategies",
+            "textbook": "Kotler & Armstrong Ch. 12; Grewal & Levy Ch. 15",
+            "definition": "The density of intermediaries used at each channel level to achieve appropriate market coverage.",
+            "framework": "3 Intensity Levels: Intensive Distribution (every available outlet), Selective Distribution (curated subset), Exclusive Distribution (exclusive territory).",
+            "example": "Snickers candy bars use Intensive distribution; Apple MacBooks use Selective distribution; Lamborghini uses Exclusive distribution.",
+            "coverage": {
+              "M304": {
+                "level": "O+T",
+                "detail": "Both: Sess 19-21 Distribution I-III"
+              },
+              "M370": {
+                "level": "O+T",
+                "detail": "All 3: Obj 7 + Wk 11/12 Ch. 15 (Intensive, Selective, Exclusive distribution)"
+              },
+              "M405": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M303": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M346": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M450": {
+                "level": "T",
+                "detail": "Wooldridge: MARKSTRAT channel coverage optimization across segments"
+              }
+            },
+            "gap_status": "Covered",
+            "courses_count": 3
+          },
+          {
+            "id": 37,
+            "name": "Vertical Marketing Systems (VMS)",
+            "textbook": "Kotler & Armstrong Ch. 12; Grewal & Levy Ch. 15; Palmatier & Sridhar Ch. 7",
+            "definition": "A unified channel structure where producers, wholesalers, and retailers act as a coordinated system to manage channel conflict.",
+            "framework": "3 VMS Architectures: Corporate VMS (common ownership), Contractual VMS (franchising), Administered VMS (channel captain power); Horizontal vs. Vertical Channel Conflict.",
+            "example": "Zara owning design, manufacturing, and stores (Corporate VMS); McDonald's coordinating franchisees (Contractual VMS); Walmart dictating supplier terms (Administered VMS).",
+            "coverage": {
+              "M304": {
+                "level": "T",
+                "detail": "Fossen: Sess 20 (Joint Marketing-Operations Session) & Sess 21 ('HBR - Should Your Company Sell on Amazon?' channel conflict); Godfrey: Sess 20 'Partner Relationship Management'"
+              },
+              "M370": {
+                "level": "O+T",
+                "detail": "All 3: Obj 7 + Wk 11/12 Ch. 15 'Supply Chain and Channel Management' (VMS & Channel Conflict)"
+              },
+              "M405": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M303": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M346": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M450": {
+                "level": "T",
+                "detail": "Wooldridge: Lect 7 'Managing Relationship-Based SCA' (Ch. 7) + B2B channel governance cases"
+              }
+            },
+            "gap_status": "Covered",
+            "courses_count": 3
+          }
+        ]
+      },
+      {
+        "id": "C15",
+        "number": 15,
+        "name": "Retailing, Wholesaling & Omnichannel Systems",
+        "scope": "Retail institutional formats, merchant vs. agent intermediaries, and unified commerce logistics.",
+        "concepts": [
+          {
+            "id": 38,
+            "name": "Multichannel & Omnichannel Logistics",
+            "textbook": "Kotler & Armstrong Ch. 12, 13; Grewal & Levy Ch. 15, 16",
+            "definition": "Integrating in-store, digital, and mobile touchpoints into a unified customer shopping journey, backed by integrated supply chain fulfillment.",
+            "framework": "Unified Commerce Model; BOPIS (Buy Online, Pick Up In Store); Inbound, Outbound & Reverse Supply Chain Logistics.",
+            "example": "Target enabling shoppers to browse via mobile app, place orders for 2-hour drive-up curbside pickup, or make seamless returns in store.",
+            "coverage": {
+              "M304": {
+                "level": "T",
+                "detail": "Fossen: Sess 20 Joint Mktg-Ops execution & Sess 21 Amazon marketplace; Godfrey: Sess 19-21"
+              },
+              "M370": {
+                "level": "T",
+                "detail": "All 3: Supply chain logistics covered in Wk 11/12 Ch. 15, but Grewal & Levy Ch. 16 ('Retailing and Omnichannel Marketing') is SKIPPED"
+              },
+              "M405": {
+                "level": "Var",
+                "detail": "Harrison [T]: Omnichannel browsing/buying journeys in Mirror Self-Study & Lab 4"
+              },
+              "M303": {
+                "level": "Var",
+                "detail": "Welden [T]: Sept 8 Customer Journey Analysis across touchpoints"
+              },
+              "M346": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M450": {
+                "level": "T",
+                "detail": "Wooldridge: MARKSTRAT brick-and-mortar + online channel integration"
+              }
+            },
+            "gap_status": "Covered",
+            "courses_count": 5
+          },
+          {
+            "id": 39,
+            "name": "Retailing & Wholesaling Dynamics",
+            "textbook": "Kotler & Armstrong Ch. 13; Kerin & Hartley Ch. 16; Grewal & Levy Ch. 16",
+            "definition": "All activities involved in selling goods directly to consumers for personal use, and wholesaling activities selling to business intermediaries.",
+            "framework": "The Wheel of Retailing; Retail Store Classification (Specialty, Department, Category Killer, Off-Price); Merchant Wholesalers vs. Agents/Brokers.",
+            "example": "Discount retailers like Aldi entering with bare-bones fixtures and low margins, while traditional grocers upgrade amenities, illustrating the Wheel of Retailing.",
+            "coverage": {
+              "M304": {
+                "level": "T",
+                "detail": "Minimal: Channel analytics in Sess 21, but institutional retailing theory (Wheel of Retailing, store classifications) is not a dedicated topic"
+              },
+              "M370": {
+                "level": "None",
+                "detail": "CURRICULUM GAP: Grewal & Levy Ch. 16 ('Retailing and Omnichannel Marketing') is SKIPPED across Marek, McManus, and Blair"
+              },
+              "M405": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M303": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M346": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M450": {
+                "level": "None",
+                "detail": "Not covered"
+              }
+            },
+            "gap_status": "True Curriculum Gap",
+            "courses_count": 1
+          }
+        ]
+      },
+      {
+        "id": "C16",
+        "number": 16,
+        "name": "Integrated Marketing Communications & Promotion Strategy",
+        "scope": "Promotional mix consistency, push/pull trade flows, AIDA consumer response funnels, and communication budgeting.",
+        "concepts": [
+          {
+            "id": 30,
+            "name": "Integrated Marketing Communications (IMC)",
+            "textbook": "Kotler & Armstrong Ch. 14; Grewal & Levy Ch. 17",
+            "definition": "Carefully integrating and coordinating the company's many communications channels to deliver a clear, consistent, and compelling message across all brand touchpoints.",
+            "framework": "Cross-Channel Message Synergy Model; Sender -> Encoding -> Channel -> Decoding -> Receiver -> Feedback Loop (with Noise).",
+            "example": "Apple's 'Shot on iPhone' campaign coordinating outdoor billboards, TV spots, Instagram user-generated hashtags, and retail displays.",
+            "coverage": {
+              "M304": {
+                "level": "O+T",
+                "detail": "Fossen: Sess 14 'Promotion foundations: Navigating the marketing funnel'; Godfrey: Explicitly in Sess 15 'Promotion I: IMC & The Marketing Funnel'"
+              },
+              "M370": {
+                "level": "O+T",
+                "detail": "All 3: Obj 7 + Wk 10/11 Ch. 17 'Integrated Marketing Communications' (2 sessions) + Mini-Case 4 on IMC"
+              },
+              "M405": {
+                "level": "T",
+                "detail": "Khamitov: 'Attitudes and Persuasive Communications I & II' (Solomon Ch. 6) + creating print & video ads; Harrison: Lab 3"
+              },
+              "M303": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M346": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M450": {
+                "level": "T",
+                "detail": "Wooldridge: Lect 5 Brand-Based SCA & Lect 8 Resource Trade-Offs"
+              }
+            },
+            "gap_status": "Core Reinforced",
+            "courses_count": 4
+          },
+          {
+            "id": 31,
+            "name": "The Promotion Mix Elements",
+            "textbook": "Kotler & Armstrong Ch. 14-16; Grewal & Levy Ch. 17-19",
+            "definition": "The specific blend of five promotional tools used to persuasively communicate customer value.",
+            "framework": "5 Promotional Elements: Advertising, Personal Selling, Sales Promotion, Public Relations, Direct & Digital Marketing.",
+            "example": "Red Bull utilizing extreme sports sponsorships (PR), campus free samples (Sales Promotion), TV spots (Advertising), and TikTok clips (Digital).",
+            "coverage": {
+              "M304": {
+                "level": "O+T",
+                "detail": "Fossen: Sess 14-17 Promotion module; Godfrey: Sess 15-16 Promotion I & II"
+              },
+              "M370": {
+                "level": "O+T",
+                "detail": "All 3: Explicitly in Obj 7 ('promotional strategies and tactics... advantages and disadvantages of each') + Ch. 17 IMC (Note: Grewal & Levy Ch. 18 Advertising/PR/Sales Promo & Ch. 19 Personal Selling are skipped as separate SmartBook assignments)"
+              },
+              "M405": {
+                "level": "Var",
+                "detail": "Khamitov [T]: Solomon Ch. 6 Persuasive Communications"
+              },
+              "M303": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M346": {
+                "level": "T",
+                "detail": "All 3: Marketing Mix Modeling evaluating advertising & promotional response"
+              },
+              "M450": {
+                "level": "T",
+                "detail": "Wooldridge: MARKSTRAT Advertising budget vs. Commercial Team (Personal Selling) allocation"
+              }
+            },
+            "gap_status": "Core Reinforced",
+            "courses_count": 5
+          },
+          {
+            "id": 32,
+            "name": "Push vs. Pull Promotion Strategies",
+            "textbook": "Kotler & Armstrong Ch. 14; Grewal & Levy Ch. 17",
+            "definition": "Strategic orientation of promotional spending: directing marketing toward channel intermediaries (Push) versus end consumers (Pull).",
+            "framework": "Push Flow: Producer -> Wholesaler -> Retailer -> Consumer (Trade promos/spiffs). Pull Flow: Consumer -> Retailer -> Wholesaler -> Producer (Consumer advertising).",
+            "example": "Pharmaceutical companies airing DTC TV ads urging viewers to 'ask your doctor' (Pull), versus industrial manufacturers offering distributor spiffs (Push).",
+            "coverage": {
+              "M304": {
+                "level": "T",
+                "detail": "Both: Covered in Promotion & Distribution sessions"
+              },
+              "M370": {
+                "level": "O+T",
+                "detail": "All 3: Obj 7 + Ch. 17 IMC (Push vs. Pull strategies) + IMC Mini-Case"
+              },
+              "M405": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M303": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M346": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M450": {
+                "level": "T",
+                "detail": "Wooldridge: MARKSTRAT Commercial Team channel push vs. Advertising consumer pull"
+              }
+            },
+            "gap_status": "Covered",
+            "courses_count": 3
+          },
+          {
+            "id": 33,
+            "name": "The AIDA Model & Hierarchy of Effects",
+            "textbook": "Kotler & Armstrong Ch. 14; Grewal & Levy Ch. 17; Solomon Ch. 6",
+            "definition": "The sequential stages of consumer psychological processing that marketing communications must guide a prospect through.",
+            "framework": "AIDA Funnel: Awareness/Attention -> Interest -> Desire -> Action; Lavidge-Steiner Hierarchy: Cognitive (Think) -> Affective (Feel) -> Conative (Do).",
+            "example": "A social video ad grabbing visual attention in 2 seconds (Attention), demonstrating a gadget (Interest), showing 5-star reviews (Desire), and offering a 20% discount link (Action).",
+            "coverage": {
+              "M304": {
+                "level": "O+T",
+                "detail": "Fossen: Sess 14 'Navigating the marketing funnel'; Godfrey: Sess 15 'IMC & The Marketing Funnel'"
+              },
+              "M370": {
+                "level": "O+T",
+                "detail": "All 3: Obj 7 + Ch. 17 IMC (AIDA Model & Lagged Effect) + IMC Mini-Case"
+              },
+              "M405": {
+                "level": "O+T",
+                "detail": "Both: Harrison Obj 1 & 5 + Decision Journey; Khamitov Obj 2 + Solomon Ch. 6 Attitudes/Persuasion Hierarchies"
+              },
+              "M303": {
+                "level": "Var",
+                "detail": "Welden Only [T]: Sept 8 Customer Journey & Sept 22 'Cognitive and Affective Basics'"
+              },
+              "M346": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M450": {
+                "level": "T",
+                "detail": "Wooldridge: MARKSTRAT brand awareness -> perceptual attitude -> purchase conversion funnel"
+              }
+            },
+            "gap_status": "Core Reinforced",
+            "courses_count": 5
+          },
+          {
+            "id": 34,
+            "name": "Promotional Budgeting Methods",
+            "textbook": "Kotler & Armstrong Ch. 14, 15; Grewal & Levy Ch. 17; Palmatier & Sridhar Ch. 8",
+            "definition": "Methods used by enterprises to determine advertising and promotional financial allocations and measure media efficiency.",
+            "framework": "Budgeting Methods: Objective-and-Task, Percentage-of-Sales, Competitive-Parity, Affordable. Media Metrics: Reach, Frequency, Gross Rating Points (GRP), CPM, CTR, ROAS.",
+            "example": "A CPG brand using the Objective-and-Task method to calculate the exact Reach and Frequency needed to achieve 30% awareness in a new market launch.",
+            "coverage": {
+              "M304": {
+                "level": "O+T",
+                "detail": "Fossen: Obj 5 + Sess 17 'Measuring promotion: Evaluating advertising effectiveness' (Nielsen Single-Source Data); Godfrey: Obj 5 + Sess 16 'Promotion II: Analytics, Tests, & Experiments'"
+              },
+              "M370": {
+                "level": "T",
+                "detail": "All 3: Ch. 17 IMC (Objective-and-Task vs. Rule-of-Thumb budgeting & media metrics) + IMC Mini-Case"
+              },
+              "M405": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M303": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M346": {
+                "level": "O+T",
+                "detail": "All 3: Marketing Mix Analytics & ad response modeling"
+              },
+              "M450": {
+                "level": "O+T",
+                "detail": "Wooldridge: Lect 8 'All Resources Are Limited \u2014 Managing Resource Trade-Offs' (Ch. 8) + BRT Tribune Resource Allocation Case + MARKSTRAT"
+              }
+            },
+            "gap_status": "Core Reinforced",
+            "courses_count": 4
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "M4",
+    "name": "Contemporary Horizons & Digital Execution",
+    "description": "Digital inbound customer engagement funnels, social media frameworks (POEM), relationship management touchpoints, global entry modes, and cross-border marketing adaptation.",
+    "color": "#7e22ce",
+    "light_color": "#faf5ff",
+    "border_color": "#a855f7",
+    "categories": [
+      {
+        "id": "C17",
+        "number": 17,
+        "name": "Digital Marketing, Inbound Strategy & CRM",
+        "scope": "Digital channel taxonomy (POEM), inbound content funnels, and relational touchpoint systems.",
+        "concepts": [
+          {
+            "id": 40,
+            "name": "Digital & Social Media Frameworks",
+            "textbook": "Kotler & Armstrong Ch. 17; Grewal & Levy Ch. 3",
+            "definition": "Modern communications channels categorized by firm control, credibility, and cost structure, alongside social media engagement stages.",
+            "framework": "POEM Taxonomy: Paid Media, Owned Media, Earned Media; The 4E Framework for Social Media (Excite, Educate, Experience, Engage).",
+            "example": "Wendy's purchasing sponsored search ads (Paid), publishing content on its corporate account (Owned), and earning organic viral press coverage (Earned).",
+            "coverage": {
+              "M304": {
+                "level": "Var",
+                "detail": "Fossen (Deep [O+T]): Dedicates 2 full sessions \u2014 Sess 15 'Digital promotion: Analytics, strategies, and targeting' (Google Analytics Demo) & Sess 16 'Social media promotion'; Godfrey covers briefly within Sess 15-16"
+              },
+              "M370": {
+                "level": "T",
+                "detail": "Weak Coverage: Grewal & Levy Ch. 3 ('Social and Mobile Marketing') is SKIPPED across Marek, McManus, and Blair; digital/social is only touched on briefly inside Ch. 17 IMC"
+              },
+              "M405": {
+                "level": "Var",
+                "detail": "Khamitov (Deep [T]): Dedicates 2 full sessions (Oct 27 & Oct 29) to 'Group Influences and Social Media I & II' (Solomon Ch. 12); Harrison covers digital browsing in Mirror Self-Study"
+              },
+              "M303": {
+                "level": "Var",
+                "detail": "Welden Only [T]: Nov 10 'Textual Analysis Introductions' in R for social/text data"
+              },
+              "M346": {
+                "level": "Var",
+                "detail": "Kong [T]: Class 9 A/B Testing in digital environments"
+              },
+              "M450": {
+                "level": "T",
+                "detail": "Wooldridge: Digital attribution & resource allocation in Ch. 8-9"
+              }
+            },
+            "gap_status": "Instructor-Dependent",
+            "courses_count": 6
+          },
+          {
+            "id": 41,
+            "name": "Inbound Marketing & Content Strategy",
+            "textbook": "Grewal & Levy Ch. 3; Kotler & Keller Ch. 20",
+            "definition": "The technique of drawing customers to products and services via content marketing, social media marketing, and search engine optimization (SEO) rather than interruptive outbound ads.",
+            "framework": "Inbound Flywheel: Attract (SEO, organic content, blogs) -> Engage (lead nurturing, email workflows) -> Delight (community, advocacy).",
+            "example": "HubSpot providing free marketing templates and white papers that rank #1 on Google, converting organic visitors into software subscribers.",
+            "coverage": {
+              "M304": {
+                "level": "Var",
+                "detail": "Fossen Only [T]: Explicitly teaches 'Social media promotion: Insights and content strategies' (Sess 16) & Google Analytics (Sess 15); Godfrey omits"
+              },
+              "M370": {
+                "level": "None",
+                "detail": "CURRICULUM GAP IN REGULAR TRACK: Grewal & Levy Ch. 3 ('Social and Mobile Marketing') is SKIPPED across Marek, McManus, and Blair"
+              },
+              "M405": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M303": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M346": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M450": {
+                "level": "None",
+                "detail": "Not covered"
+              }
+            },
+            "gap_status": "True Curriculum Gap",
+            "courses_count": 1
+          },
+          {
+            "id": 42,
+            "name": "CRM Strategy & Touchpoint Management",
+            "textbook": "Kotler & Armstrong Ch. 1, 4; Palmatier & Sridhar Ch. 7",
+            "definition": "Managing detailed information about individual customers and carefully managing customer touchpoints to maximize customer retention and loyalty.",
+            "framework": "Customer Journey Touchpoint Mapping: Pre-purchase -> Purchase -> Post-purchase; Relationship Marketing & Churn Mitigation.",
+            "example": "Sephora's Beauty Insider CRM tracking purchase history across app and stores to trigger personalized replenishment reminders and custom birthday gifts.",
+            "coverage": {
+              "M304": {
+                "level": "T",
+                "detail": "Fossen: Sess 5 CLV & customer insights; Godfrey: Sess 12 'Customer relationships & pricing' & Sess 20 'Partner Relationship Management'"
+              },
+              "M370": {
+                "level": "T",
+                "detail": "All 3: Ch. 1-2 Relational orientation & CRM foundations"
+              },
+              "M405": {
+                "level": "O+T",
+                "detail": "Harrison: Obj 5 Customer Journeys & Lab 4; Khamitov: Brand Experience Diary & Consumer Trust meta-analysis"
+              },
+              "M303": {
+                "level": "Var",
+                "detail": "Welden Only [T]: Sept 8 'Customer Journey Analysis' & Sept 10 Case #1"
+              },
+              "M346": {
+                "level": "T",
+                "detail": "Zhang: Churn forecasting; Lalwani & Kong: Customer Choice & Response Models"
+              },
+              "M450": {
+                "level": "O+T",
+                "detail": "Wooldridge: Dedicated Lect 7 'Managing Relationship-Based SCA' (Ch. 7) & Lect 3 Customer Retention"
+              }
+            },
+            "gap_status": "Core Reinforced",
+            "courses_count": 6
+          }
+        ]
+      },
+      {
+        "id": "C18",
+        "number": 18,
+        "name": "Global Marketing Strategy & International Market Entry",
+        "scope": "Cross-border expansion entry modes and the standardization versus local adaptation trade-off.",
+        "concepts": [
+          {
+            "id": 43,
+            "name": "Global Market Entry Strategies",
+            "textbook": "Kotler & Armstrong Ch. 19; Kerin & Hartley Ch. 7; Grewal & Levy Ch. 8",
+            "definition": "Strategic modes for entering foreign international markets, ordered along increasing levels of financial commitment, risk, control, and profit potential.",
+            "framework": "Entry Hierarchy: Exporting -> Franchising / Licensing -> Strategic Alliance / Joint Venture -> Direct Investment (Wholly Owned Subsidiary).",
+            "example": "An American craft brewery beginning by Exporting bottles overseas, advancing to Licensing brewing rights to a European partner, and building a wholly owned overseas facility.",
+            "coverage": {
+              "M304": {
+                "level": "None",
+                "detail": "Omitted (Fossen Sess 8 covers domestic startup market entry only, not international cross-border entry modes)"
+              },
+              "M370": {
+                "level": "None",
+                "detail": "CURRICULUM GAP: Grewal & Levy Ch. 8 ('Global Marketing') is SKIPPED across Marek, McManus, and Blair"
+              },
+              "M405": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M303": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M346": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M450": {
+                "level": "O",
+                "detail": "Nominal Objective Only: Wooldridge lists Obj 8 ('role of marketing in addressing social and global issues'), but 0 lectures cover international market entry modes"
+              }
+            },
+            "gap_status": "True Curriculum Gap",
+            "courses_count": 0
+          },
+          {
+            "id": 44,
+            "name": "Standardization vs. Adaptation",
+            "textbook": "Kotler & Armstrong Ch. 19; Kerin & Hartley Ch. 7; Grewal & Levy Ch. 8",
+            "definition": "The strategic debate regarding whether to maintain a uniform global marketing mix across borders or adapt offerings to unique cultural, economic, and legal environments.",
+            "framework": "Glocal Strategy ('Think Globally, Act Locally'); Global Product & Promotion Adaptation Matrix (Straight Extension, Product Adaptation, Communication Adaptation, Dual Adaptation).",
+            "example": "McDonald's standardizing operational cleanliness and golden arches globally, while adapting menus locally (McSpicy Paneer in India, Teriyaki McBurger in Japan).",
+            "coverage": {
+              "M304": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M370": {
+                "level": "None",
+                "detail": "CURRICULUM GAP: Grewal & Levy Ch. 8 ('Global Marketing') is SKIPPED across all sections"
+              },
+              "M405": {
+                "level": "O+T",
+                "detail": "Cross-Cultural CB Only: Harrison Obj 1 & Course Desc ('cross-cultural influences on consumer behavior'); Khamitov Ch. 11 Subcultures & Ch. 14 Culture I & II (3 sessions)"
+              },
+              "M303": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M346": {
+                "level": "None",
+                "detail": "Not covered"
+              },
+              "M450": {
+                "level": "O",
+                "detail": "Nominal Objective Only: Obj 8 mentions global issues, but no lecture covers global 4Ps standardization vs. adaptation"
+              }
+            },
+            "gap_status": "True Curriculum Gap",
+            "courses_count": 1
+          }
+        ]
+      }
+    ]
+  }
+];
+    const coursesMetadata = [
+  {
+    "code": "M304",
+    "title": "BUS-M304: Honors Marketing I-Core",
+    "sequence": "Step 1: I-Core Gateway (Honors Track)",
+    "prereq": "I-Core Honors Admission",
+    "instructors": [
+      {
+        "name": "Prof. Beth Fossen",
+        "sections": "10905, 3317, 1199",
+        "materials": "Custom reading packets & cases on Canvas (No textbook); Google Analytics Demo, Nielsen Ad Effectiveness, HBR Amazon Channel Case",
+        "highlights": "Startup I-Core Business Plan (20%) + 3 Case Homeworks (15%); dedicated sessions on CLV (Sess 5), Market Entry (Sess 8), Demand Forecasting (Sess 12), Digital/Google Analytics (Sess 15), Social Media Content (Sess 16), Nielsen Ad Measurement (Sess 17), Joint Marketing-Operations Distribution (Sess 20), and Stakeholder Ethics (Sess 23)."
+      },
+      {
+        "name": "Dr. Zo\u00eb Godfrey",
+        "sections": "10906, 10907, 1200",
+        "materials": "Custom reading packets & slide decks on Canvas (No textbook)",
+        "highlights": "Startup I-Core Business Plan (20%) + 3-part live-client Marketing Consulting Assignment (MCA 15%); frames course around the Operating Profit Formula; teaches Mass Market (Sess 3), Consumer Psychology (Sess 5), BOR Stack for SCAs (Sess 6), Pricing IV Trends & Ethics (Sess 14), Promotion Experiments (Sess 16), and Partner Relationship Mgmt (Sess 20)."
+      }
+    ],
+    "objectives": [
+      "1. Explain the concepts, frameworks, analyses, and activities that comprise marketing management.",
+      "2. Analyze and assess market opportunities by evaluating customers, competitors, and the company's strengths and weaknesses.",
+      "3. Apply the concepts of marketing research to evaluate the implications of different strategic and tactical marketing decisions.",
+      "4. Make informed solutions to different marketing problems and challenges.",
+      "5. Calculate marketing metrics, interpret their meaning, and interpret business information.",
+      "6. Apply different marketing frameworks and methods when developing a business plan within a team."
+    ]
+  },
+  {
+    "code": "M370",
+    "title": "BUS-M370: Integrated Business Core (Regular Track)",
+    "sequence": "Step 1: I-Core Gateway (Regular Track)",
+    "prereq": "I-Core Admission",
+    "instructors": [
+      {
+        "name": "Prof. Barry Marek",
+        "sections": "4284, 10876, 7601, 10878",
+        "materials": "Grewal & Levy 8e (11 SmartBook chapters: Ch. 1, 2, 4, 5, 6, 9, 11, 12, 14, 15, 17) + Precision Polymers B2B Case + 4 Mini-Cases",
+        "highlights": "100% in-person; omits the Week 8 Marketing Research session to spend extra time on Product, Pricing, and Supply Chain/Precision Polymers Part 2; schedules a Week 12 Guest Lecture."
+      },
+      {
+        "name": "Dr. Kristy McManus",
+        "sections": "1201, 4563, 1202, 1203 (8204, 8206, 8207, 8215)",
+        "materials": "Grewal & Levy 8e (11 SmartBook chapters) + Precision Polymers B2B Case + 4 Mini-Cases",
+        "highlights": "100% in-person; dedicates Week 8 Session 1 (Oct 12/13) to Marketing Research featuring industry guest speaker Melinda Spaulding (Practical Insights, Inc.)."
+      },
+      {
+        "name": "Dr. James Blair",
+        "sections": "4283, 9548, 10879, 10877",
+        "materials": "Grewal & Levy 8e (11 SmartBook chapters) + Precision Polymers B2B Case + 4 Mini-Cases",
+        "highlights": "Deducates Week 8 Session 1 to a Marketing Research lecture; delivers 2 sessions as asynchronous recordings on Canvas (Wk 5 Target Marketing and Wk 11 IMC)."
+      }
+    ],
+    "objectives": [
+      "1. Explain the role of marketing as it affects performance at the department and firm levels.",
+      "2. Explain the importance of target markets and understand segmentation and positioning.",
+      "3. Identify the target customers or target segments that provide the best potential for a product or service using quantitative and qualitative data.",
+      "4. Apply basic marketing analytic techniques to a variety of marketing situations and problems.",
+      "5. Apply the concept of customer value to developing and managing products and the product portfolio.",
+      "6. Understand the pricing of a new product given cost information and the price sensitivity of customers.",
+      "7. Identify the various product, branding, distribution and promotional strategies and tactics available to a brand and its product portfolio and articulate the advantages and disadvantages of each.",
+      "8. Summarize, analyze, and articulate marketing solutions in the context of realistic business scenarios."
+    ]
+  },
+  {
+    "code": "M405",
+    "title": "BUS-M405: Consumer Behavior",
+    "sequence": "Step 2: Open-Sequence Core (No Prerequisites)",
+    "prereq": "None",
+    "instructors": [
+      {
+        "name": "Dr. Kristina Harrison",
+        "sections": "13900, 13901",
+        "materials": "Canvas Modules (no standalone textbook); 6 Consumer Insight Labs, 4 Mirror Self-Study Stages, 5-Stage Client Consulting Project",
+        "highlights": "Explicitly covers Organizational (B2B) Buying Processes, Roles & Risks (Obj 3, Quiz 4, Lab 6 B2B Case), SWOT/Buyer Trends, and STP/Customer Journeys; 1 Midterm + 4 Quizzes (no Final Exam)."
+      },
+      {
+        "name": "Dr. Mansur Khamitov",
+        "sections": "1204, 1205, 9633",
+        "materials": "Solomon 15e (Ch. 1-14) + 4 HBR/JCR/Rotman Readings (GenAI in MR, Expensive Products/Decoys, Consumer Trust Meta-Analysis, Nudging)",
+        "highlights": "100% B2C psychological & socio-cultural focus (omits B2B); adds 3 full lectures on Consumers & Brands / Brand Trust, Behavioral Economics/Nudging, a 4-week Brand Experience Diary (15%), and a 45% 'Helping Consumers Make Better Choices' ad & survey project."
+      }
+    ],
+    "objectives": [
+      "Harrison 1-3: Explain how perception, learning, motivation, attitudes, identity, groups, social class, and culture shape buyer behavior; analyze personal purchasing/browsing/disposal; compare individual consumer decisions with organizational (B2B) buying processes, roles, risks, and criteria.",
+      "Harrison 4-8: Design ethical consumer research and evaluate primary/secondary evidence; develop consumer & organizational-buyer profiles, journeys, and segments; translate theory into ethical marketing recommendations; collaborate on a client consulting project.",
+      "Khamitov 1-7: Analyze own and others' consumer behavior; discuss connections among human needs, attitudes, and decision-making; critically evaluate CB theories and research; appreciate value of CB in marketing strategy; possess insight into recent trends (GenAI, nudging, brand trust); contribute to solving real-world marketing problems."
+    ]
+  },
+  {
+    "code": "M303",
+    "title": "BUS-M303: Marketing Research",
+    "sequence": "Step 3: Post-I-Core Methods Core (Concurrent with M346)",
+    "prereq": "BUS-M304 or BUS-M370 (C or higher)",
+    "instructors": [
+      {
+        "name": "Dr. Roman Welden",
+        "sections": "1197, 11010, 11011",
+        "materials": "Course notes, 5 Cases, 6 R Videos; Software: Local R + Qualtrics",
+        "highlights": "High statistical & domain depth: covers Customer Journey Analysis, Cognitive/Affective Psych Constructs, MR for Nonprofits/Public Policy/Sustainability, Ethics & AI in MR, Experimental Pre-registration, Regression, Interaction Effects & Causal Chains, and Textual Analysis in R."
+      },
+      {
+        "name": "Dr. Zekun Liu",
+        "sections": "1196, 4946, 1198",
+        "materials": "Course notes on Canvas; Software: R via Google Colab + Qualtrics",
+        "highlights": "Links research explicitly to 4Ps decisions; covers Secondary Data, Focus Group coding, Survey Measurement/Scales, Fieldwork & Data Quality, Examining Relationships (2 lectures), Causal Research I & II, and 3 open-hardcopy-note exams."
+      },
+      {
+        "name": "Dr. Koray Cosguner",
+        "sections": "8953",
+        "materials": "Lectures, 5 Assignments, Term Project (2-page abridged syllabus)",
+        "highlights": "Strong econometric emphasis: covers exploratory/descriptive/causal designs, syndicated data, qualitative & survey/experimental primary collection, correlation, regression, and models for count and choice outcomes."
+      },
+      {
+        "name": "Dr. Brian A. Vander Schee",
+        "sections": "10446, 10199",
+        "materials": "Canvas slide decks; Software: Microsoft Excel + Qualtrics (no R coding)",
+        "highlights": "Applied client agency workflow: requires mandatory CITI Human Subjects IRB certification (11 modules), brings in 2 industry guest speakers, runs live Focus Groups across 3 rooms, and structures the project into 8 weekly team MRAs."
+      }
+    ],
+    "objectives": [
+      "1. Translate an ambiguous marketing problem or opportunity into clear research objectives, research questions, testable hypotheses, and a defensible research design (exploratory, descriptive, or causal).",
+      "2. Evaluate secondary and syndicated data before collecting primary data.",
+      "3. Design ethical primary-data collection instruments (qualitative focus groups/protocols, observational techniques, valid/reliable Qualtrics surveys, and experimental designs) with sound sampling procedures.",
+      "4. Prepare, clean, and analyze marketing data using appropriate statistical tools (descriptives, group differences/t-tests/ANOVA, associations/chi-square/correlation, and regression/choice/interaction models in R or Excel).",
+      "5. Interpret research evidence in terms of managerial consequence and communicate concise, decision-oriented recommendations to stakeholders."
+    ]
+  },
+  {
+    "code": "M346",
+    "title": "BUS-M346: Analysis of Marketing Data (Marketing Analytics)",
+    "sequence": "Step 3: Post-I-Core Quantitative Core (Concurrent with M303)",
+    "prereq": "BUS-M304 or BUS-M370 (C or higher)",
+    "instructors": [
+      {
+        "name": "Prof. Ashok K. Lalwani",
+        "sections": "5833, 5834, 14279",
+        "materials": "Canvas slides & datasets; Software: IBM SPSS + Excel in HH 2055 lab (GenAI strictly prohibited)",
+        "highlights": "4 Modules: (1) Fundamentals of Data Analysis, (2) Analysis of Survey & Secondary Data (hypothesis testing, t-tests), (3) Demand Forecasting & Marketing Mix Analytics (correlation, linear & multiple regression), (4) Customer Choice & Response Models (binary & multinomial logit). Teams design a survey and collect primary data."
+      },
+      {
+        "name": "Dr. Xinyao Kong",
+        "sections": "5835, 5837, 7807",
+        "materials": "Canvas slides & datasets; Software: R via Google Colab (GenAI encouraged with citation)",
+        "highlights": "Application-driven progression: Descriptive Analytics -> Statistical Inference -> A/B Testing (Class 9) -> Linear Regression -> Demand Modeling (3 sessions) -> Pricing Strategy (2 sessions) -> Customer Choice Models (4 sessions) -> Segmentation & Pricing (Class 23) -> Conjoint Application (Class 24)."
+      },
+      {
+        "name": "Dr. Weiqing Zhang",
+        "sections": "5841, 7050, 5838",
+        "materials": "Canvas slides & datasets; Software: R via Google Colab (GenAI encouraged with citation)",
+        "highlights": "4-Stage Decision Progression: (1) Descriptive (data visualization), (2) Inference (testing for differences), (3) Prediction (demand & churn forecasting), (4) Prescription (marketing mix models, causal inference basics, conjoint analysis for market simulation), plus Outlook."
+      }
+    ],
+    "objectives": [
+      "1. Identify relevant analytical and statistical tools for a given marketing problem based on the available marketing data [Goals 3, 5].",
+      "2. Implement the statistical analysis through the use of the designated statistical software package (SPSS in Lalwani; R in Google Colab in Kong & Zhang) [Goals 3, 5].",
+      "3. Understand how to interpret the software package's output in substantive terms to solve the underlying marketing problem [Goals 1, 3, 5].",
+      "4. Clearly communicate the results of the data analysis to aid marketing managers and business stakeholders in making marketing decisions [Goals 1, 4, 6]."
+    ]
+  },
+  {
+    "code": "M450",
+    "title": "BUS-M450: Marketing Strategy (Capstone)",
+    "sequence": "Step 4: Senior Major Capstone",
+    "prereq": "BUS-M304/M370, BUS-M303, and BUS-M346",
+    "instructors": [
+      {
+        "name": "Dr. Barbara Ross Wooldridge",
+        "sections": "1207, 32113",
+        "materials": "Palmatier & Sridhar 2e ('Marketing Strategy Based on First Principles and Data Analytics') + MARKSTRAT Simulation (9 rounds) + Custom M450 Data Analysis Web App + 11 Cases",
+        "highlights": "Organizes curriculum around the Four First Principles (MP1 Customer Heterogeneity/STP; MP2 Customer Change/Lifecycle/CLV; MP3 Sustainable Competitive Advantage across Brands, Offerings, and Relationships; MP4 Limited Resources & Analytics Attribution)."
+      }
+    ],
+    "objectives": [
+      "1. Clearly define a marketing strategy and delineate mutually interdependent relationships involved in implementing the strategy.",
+      "2. Apply the concepts of marketing research to evaluate the implications of different strategic and tactical marketing decisions.",
+      "3. Expand decision skills by making and defending marketing decisions in situations with incomplete information.",
+      "4. Calculate basic statistics, interpret their meaning, and interpret business information.",
+      "5. Collaborate effectively with others in a team environment.",
+      "6. Present marketing ideas in written and oral forms.",
+      "7. Learn about ethical concerns within marketing.",
+      "8. Learn about the role of marketing in addressing social and global issues of society."
+    ]
+  }
+];
 
     let activeView = 'tree';
     let allConcepts = [];
@@ -967,7 +2665,7 @@
 
     function switchView(viewName) {
       activeView = viewName;
-      ['tree', 'sunburst', 'cards', 'table'].forEach(v => {
+      ['tree', 'sunburst', 'cards', 'table', 'syllabus'].forEach(v => {
         document.getElementById(v + 'View').classList.add('hidden');
         document.getElementById('btn' + v.charAt(0).toUpperCase() + v.slice(1)).classList.remove('active-tab');
         document.getElementById('btn' + v.charAt(0).toUpperCase() + v.slice(1)).classList.add('text-slate-600');
@@ -986,6 +2684,28 @@
         renderSunburst();
         window.sunburstRendered = true;
       }
+    }
+
+    function applyCourseHighlight() {
+      const mode = document.getElementById('courseHighlightSelect').value;
+      d3.selectAll('.tree-node').each(function(d) {
+        const el = d3.select(this);
+        if (mode === 'ALL' || d.depth < 3) {
+          el.attr('opacity', 1);
+          return;
+        }
+        const c = allConcepts.find(item => item.id === d.data.id);
+        if (!c) return;
+        let match = false;
+        if (mode === 'GAPS') {
+          match = c.gap_status === 'True Curriculum Gap';
+        } else if (mode === 'VAR') {
+          match = c.gap_status === 'Instructor-Dependent';
+        } else if (c.coverage && c.coverage[mode]) {
+          match = c.coverage[mode].level !== 'None';
+        }
+        el.attr('opacity', match ? 1 : 0.2);
+      });
     }
 
     function filterConcepts() {
@@ -1014,7 +2734,16 @@
         }
       });
 
-      // Highlight matching nodes in Tree View
+      const sylRows = document.querySelectorAll('.syllabus-concept-row');
+      sylRows.forEach(r => {
+        const text = r.innerText.toLowerCase();
+        if (!query || text.includes(query)) {
+          r.classList.remove('hidden');
+        } else {
+          r.classList.add('hidden');
+        }
+      });
+
       d3.selectAll('.tree-node').each(function(d) {
         const el = d3.select(this);
         if (!query) {
@@ -1029,8 +2758,6 @@
 
     // =========================================================================
     // TAB 1: TOP 50 MARKETING CONCEPT HIERARCHY (INTERACTIVE TREE STRUCTURE)
-    // Uses ONLY title/name for branches, categories, and concepts, and displays
-    // the formal definition on mouseover.
     // =========================================================================
     let treeRoot = null;
     let treeLayout = null;
@@ -1064,7 +2791,10 @@
               id: c.id,
               color: mod.color,
               lightBg: "#ffffff",
-              definition: c.definition
+              definition: c.definition,
+              coverage: c.coverage,
+              gap_status: c.gap_status,
+              courses_count: c.courses_count
             }))
           }))
         }))
@@ -1093,8 +2823,6 @@
       const height = Math.max(580, leavesCount * rowHeight + 80);
       const width = 1220;
 
-      // Horizontal positions for the 4 levels:
-      // 0: Marketing | 1: 4 Primary Branches | 2: 18 Categories | 3: 50 Concepts
       const levelX = {
         0: 35,
         1: 195,
@@ -1174,8 +2902,14 @@
           if (d.depth === 2) return d.data.lightBg;
           return "#ffffff";
         })
-        .attr("stroke", d => d.data.color || "#334155")
-        .attr("stroke-width", d => d.depth === 3 ? 1.2 : 1.6);
+        .attr("stroke", d => {
+          if (d.depth === 3 && d.data.gap_status === "True Curriculum Gap") return "#e11d48";
+          return d.data.color || "#334155";
+        })
+        .attr("stroke-width", d => {
+          if (d.depth === 3 && d.data.gap_status === "True Curriculum Gap") return 2;
+          return d.depth === 3 ? 1.2 : 1.6;
+        });
 
       node.filter(d => d.depth === 3)
         .append("rect")
@@ -1184,7 +2918,7 @@
         .attr("width", 4)
         .attr("height", d => getNodeBoxHeight(d))
         .attr("rx", 2)
-        .attr("fill", d => d.data.color);
+        .attr("fill", d => d.data.gap_status === "True Curriculum Gap" ? "#e11d48" : d.data.color);
 
       // Node Text Labels (Strictly Title/Name Only)
       node.append("text")
@@ -1213,6 +2947,8 @@
         .attr("fill", d => d.data.color)
         .attr("stroke", "#fff")
         .attr("stroke-width", 1.5);
+
+      applyCourseHighlight();
     }
 
     function getNodeBoxWidth(d) {
@@ -1232,14 +2968,29 @@
     function showTreeDefinition(event, d) {
       const tooltip = document.getElementById('treeTooltip');
       const badge = document.getElementById('tooltipTypeBadge');
+      const coursesBadge = document.getElementById('tooltipCoursesBadge');
       const title = document.getElementById('tooltipTitle');
       const def = document.getElementById('tooltipDefinition');
+      const sylBox = document.getElementById('tooltipSyllabusBox');
 
       badge.innerText = d.data.levelLabel;
       badge.style.backgroundColor = d.data.color + '20';
       badge.style.color = d.data.color;
       title.innerText = d.data.name;
       def.innerText = d.data.definition;
+
+      if (d.data.type === 'concept' && d.data.coverage) {
+        coursesBadge.innerText = `${d.data.courses_count}/6 Courses (${d.data.gap_status})`;
+        sylBox.classList.remove('hidden');
+        const activeCourses = Object.entries(d.data.coverage)
+          .filter(([k, v]) => v.level !== 'None')
+          .map(([k, v]) => `<span class="inline-block font-mono font-bold text-[10px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-800 mr-1 mb-1">${k}: ${v.level}</span>`)
+          .join('');
+        sylBox.innerHTML = `<div class="font-bold text-[10px] uppercase text-slate-400">Syllabus Coverage:</div><div>${activeCourses || '<span class="text-rose-600 font-bold">0/6 Courses (Curriculum Gap)</span>'}</div>`;
+      } else {
+        coursesBadge.innerText = '';
+        sylBox.classList.add('hidden');
+      }
 
       tooltip.classList.remove('hidden');
       moveTreeTooltip(event);
@@ -1293,9 +3044,9 @@
       updateTreeDiagram();
     }
 
-    // Render Curriculum Cards:
-    // 1. Category header + Category description inside a standardized fixed-height box (h-[74px])
-    // 2. Individual concept boxes vertically aligned across category columns with identical fixed height (h-[285px])
+    // =========================================================================
+    // TAB 3: CURRICULUM CARD MATRIX (STANDARDIZED HEIGHTS, BOXED DESCRIPTIONS)
+    // =========================================================================
     function renderCards() {
       const container = document.getElementById('matrixContainer');
       container.innerHTML = '';
@@ -1333,7 +3084,6 @@
                     </span>
                   </div>
                   
-                  <!-- Standardized Title Height so Description Boxes start at the exact same vertical line -->
                   <div class="h-[38px] flex items-center">
                     <h4 class="text-xs font-bold text-slate-900 leading-snug">${cat.name}</h4>
                   </div>
@@ -1356,7 +3106,9 @@
                           <span class="font-mono font-bold text-[10px] px-2 py-0.5 rounded bg-indigo-50 text-indigo-800 border border-indigo-200">
                             #${c.id}
                           </span>
-                          <span class="text-[10px] text-slate-400 font-medium truncate">${c.textbook.split(';')[0]}</span>
+                          <span class="text-[10px] font-semibold px-1.5 py-0.5 rounded ${getGapBadgeClass(c.gap_status)}">
+                            ${c.courses_count}/6 Courses
+                          </span>
                         </div>
                         <h5 class="font-bold text-slate-900 leading-snug text-xs break-words mb-1.5 shrink-0">${c.name}</h5>
                         <p class="text-[11px] text-slate-600 leading-relaxed break-words">${c.definition}</p>
@@ -1377,7 +3129,24 @@
       });
     }
 
-    // Render Table View (Kept As Is)
+    function getGapBadgeClass(status) {
+      if (status === 'Core Reinforced') return 'bg-emerald-100 text-emerald-800';
+      if (status === 'Covered') return 'bg-blue-100 text-blue-800';
+      if (status === 'Instructor-Dependent') return 'bg-amber-100 text-amber-900';
+      return 'bg-rose-100 text-rose-800';
+    }
+
+    function getCoverageCellBadge(level) {
+      if (level === 'O+T') return '<span class="inline-block px-2 py-0.5 rounded bg-emerald-100 text-emerald-900 font-mono font-bold text-[10px]">O+T</span>';
+      if (level === 'T') return '<span class="inline-block px-2 py-0.5 rounded bg-blue-100 text-blue-900 font-mono font-bold text-[10px]">T</span>';
+      if (level === 'Var') return '<span class="inline-block px-2 py-0.5 rounded bg-amber-100 text-amber-900 font-mono font-bold text-[10px]">Var</span>';
+      if (level === 'O') return '<span class="inline-block px-2 py-0.5 rounded bg-purple-100 text-purple-900 font-mono font-bold text-[10px]">O</span>';
+      return '<span class="text-slate-300 font-mono">&mdash;</span>';
+    }
+
+    // =========================================================================
+    // TAB 4: TAXONOMY TABLE VIEW (KEPT AS IS)
+    // =========================================================================
     function renderTable() {
       const tbody = document.getElementById('tableBody');
       tbody.innerHTML = '';
@@ -1416,7 +3185,92 @@
       });
     }
 
-    // Global D3 Sunburst State & Zoom Mechanics
+    // =========================================================================
+    // TAB 5: SYLLABUS COVERAGE & GAP ANALYSIS VIEW
+    // =========================================================================
+    function renderCourseCards() {
+      const container = document.getElementById('courseCardsContainer');
+      container.innerHTML = '';
+
+      coursesMetadata.forEach(course => {
+        const el = document.createElement('div');
+        el.className = 'bg-slate-50 rounded-xl p-4 border border-slate-200 space-y-3 flex flex-col justify-between';
+        el.innerHTML = `
+          <div class="space-y-2">
+            <div class="flex items-center justify-between gap-2">
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-indigo-100 text-indigo-900 font-mono">${course.sequence}</span>
+              <span class="text-[10px] text-slate-500 font-medium">Prereq: ${course.prereq}</span>
+            </div>
+            <h4 class="text-sm font-extrabold text-slate-900">${course.title}</h4>
+            
+            <div class="bg-white p-3 rounded-lg border border-slate-200 space-y-1">
+              <div class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Course-Level Learning Objectives (Excl. Program SLOs)</div>
+              <ul class="list-disc pl-4 space-y-1 text-[11px] text-slate-700 leading-relaxed">
+                ${course.objectives.map(o => `<li>${o}</li>`).join('')}
+              </ul>
+            </div>
+
+            <div class="space-y-1.5 pt-1">
+              <div class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Instructor-Specific Variations (${course.instructors.length} Syllabi)</div>
+              ${course.instructors.map(inst => `
+                <div class="bg-white p-2.5 rounded-lg border border-slate-200 text-[11px]">
+                  <div class="font-bold text-slate-900">${inst.name} <span class="font-normal text-slate-400 font-mono text-[10px]">(Sec: ${inst.sections})</span></div>
+                  <div class="text-[10px] text-indigo-700 font-medium mt-0.5">${inst.materials}</div>
+                  <p class="text-slate-600 mt-1 leading-relaxed">${inst.highlights}</p>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+        container.appendChild(el);
+      });
+    }
+
+    function renderSyllabusTable() {
+      const tbody = document.getElementById('syllabusTableBody');
+      const filterVal = document.getElementById('gapFilterSelect').value;
+      tbody.innerHTML = '';
+
+      allConcepts.forEach(c => {
+        if (filterVal !== 'ALL' && c.gap_status !== filterVal) return;
+
+        const tr = document.createElement('tr');
+        tr.className = 'syllabus-concept-row hover:bg-slate-50 transition-colors cursor-pointer';
+        tr.onclick = () => openModal(c.id);
+
+        const cov = c.coverage;
+        const evidenceSummary = Object.entries(cov)
+          .filter(([k, v]) => v.level !== 'None' || c.gap_status === 'True Curriculum Gap')
+          .map(([k, v]) => `<strong>${k}:</strong> ${v.detail}`)
+          .join(' &bull; ');
+
+        tr.innerHTML = `
+          <td class="p-3 text-center font-mono font-bold text-slate-600">#${c.id}</td>
+          <td class="p-3">
+            <div class="text-[10px] font-bold uppercase tracking-wider" style="color: ${c.moduleColor}">${c.moduleName}</div>
+            <div class="text-[11px] font-semibold text-slate-700">C${c.catNumber}: ${c.catName}</div>
+          </td>
+          <td class="p-3 font-bold text-slate-900 hover:text-indigo-600">${c.name}</td>
+          <td class="p-3 text-center" title="${cov.M304.detail}">${getCoverageCellBadge(cov.M304.level)}</td>
+          <td class="p-3 text-center" title="${cov.M370.detail}">${getCoverageCellBadge(cov.M370.level)}</td>
+          <td class="p-3 text-center" title="${cov.M405.detail}">${getCoverageCellBadge(cov.M405.level)}</td>
+          <td class="p-3 text-center" title="${cov.M303.detail}">${getCoverageCellBadge(cov.M303.level)}</td>
+          <td class="p-3 text-center" title="${cov.M346.detail}">${getCoverageCellBadge(cov.M346.level)}</td>
+          <td class="p-3 text-center" title="${cov.M450.detail}">${getCoverageCellBadge(cov.M450.level)}</td>
+          <td class="p-3 text-center">
+            <span class="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold ${getGapBadgeClass(c.gap_status)}">
+              ${c.gap_status}
+            </span>
+          </td>
+          <td class="p-3 text-[11px] text-slate-600 leading-relaxed max-w-md">${evidenceSummary}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // =========================================================================
+    // TAB 2: D3 SUNBURST WHEEL
+    // =========================================================================
     let sunburstRootNode = null;
     let sunburstCurrentNode = null;
     let sunburstSvg = null;
@@ -1682,12 +3536,27 @@
 
       document.getElementById('modalIdBadge').innerText = `Concept #${c.id}`;
       document.getElementById('modalModuleBadge').innerText = c.moduleName;
+      const gapBadge = document.getElementById('modalGapBadge');
+      gapBadge.innerText = `${c.gap_status} (${c.courses_count}/6 Courses)`;
+      gapBadge.className = `px-2.5 py-0.5 rounded-full text-xs font-bold ${getGapBadgeClass(c.gap_status)}`;
+
       document.getElementById('modalTitle').innerText = c.name;
       document.getElementById('modalCategory').innerText = `Category #${c.catNumber}: ${c.catName}`;
       document.getElementById('modalTextbook').innerText = c.textbook;
       document.getElementById('modalDefinition').innerText = c.definition;
       document.getElementById('modalFramework').innerText = c.framework;
       document.getElementById('modalExample').innerText = c.example;
+
+      const covGrid = document.getElementById('modalCoverageGrid');
+      covGrid.innerHTML = Object.entries(c.coverage).map(([courseCode, info]) => `
+        <div class="p-2.5 rounded-lg border border-slate-200 bg-slate-50 flex flex-col justify-between">
+          <div class="flex items-center justify-between gap-2 mb-1">
+            <span class="font-bold text-slate-900 font-mono text-xs">${courseCode}</span>
+            ${getCoverageCellBadge(info.level)}
+          </div>
+          <p class="text-[11px] text-slate-600 leading-relaxed">${info.detail}</p>
+        </div>
+      `).join('');
 
       document.getElementById('conceptModal').classList.remove('hidden');
     }
@@ -1712,6 +3581,8 @@
       window.treeRendered = true;
       renderCards();
       renderTable();
+      renderCourseCards();
+      renderSyllabusTable();
     });
   </script>
 </body>
